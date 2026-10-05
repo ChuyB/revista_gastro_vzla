@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: revista_ojs_app
+    ports:
+      - "8080:80"
+    volumes:
+      - ./ojs_code:/var/www/html
+      - ./ojs_files:/var/ojs/files
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    container_name: revista_ojs_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: ojsg
+      MYSQL_USER: ojs_user
+      MYSQL_PASSWORD: ojs_password
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+      - ./init_db:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
