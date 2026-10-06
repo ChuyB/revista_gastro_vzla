@@ -58,26 +58,30 @@
  * Desktop grid (>= 801px)
  * ------------------------------------------------------------------------ */
 
-@media (min-width: 801px) {
+	@media (min-width: 801px) {
+	/*
+	 * Two columns: main content and the right sidebar. Only two rows — the
+	 * navbar strip, then the content row.
+	 *
+	 * Earlier revisions dissolved #sidebar/#rightSidebar with `display: contents`
+	 * and gave each block its own grid row so blocks could be placed individually.
+	 * That stops working once there is no left sidebar: with #main spanning the
+	 * sidebar rows, the grid distributes main's height across those rows, which
+	 * pushed the lower sidebar blocks to the bottom of long pages ("sticks to the
+	 * bottom"). Leaving the wrappers as real blocks lets the sidebar cards stack
+	 * in normal flow, so their order comes from each block's `seq` setting and
+	 * nothing depends on how tall #main is.
+	 */
 	#body {
 		display: grid;
 		grid-template-columns: minmax(0, 1fr) var(--gen-sidebar-width);
-		grid-template-rows: auto 1fr auto auto;
+		grid-template-rows: auto 1fr auto;
 		align-items: start;
 		column-gap: var(--gen-space-6);
 		row-gap: var(--gen-space-5);
 	}
 
-	/*
-	 * Dissolve the sidebar wrappers so each block becomes an individually
-	 * placeable grid item. Safe on <div>: no ARIA role is lost.
-	 */
-	#sidebar,
-	#rightSidebar {
-		display: contents;
-	}
-
-	/* Row 1: full-width navbar strip (hero image sits above this in #header) */
+	/* Row 1: full-width navbar strip (the hero image sits above this in #header) */
 	#navbarBar {
 		grid-column: 1 / -1;
 		grid-row: 1;
@@ -91,40 +95,25 @@
 		background: var(--gen-surface-alt);
 	}
 
-	/* Rows 2-3: main spans both so the sidebar column stacks independently */
+	/* Row 2: main content left, right sidebar column right */
 	#main {
 		grid-column: 1;
-		grid-row: 2 / 4;
+		grid-row: 2;
 	}
 
-	/*
-	 * Block placement map.
-	 *
-	 * CSS Grid cannot stack several items in a single cell, so every sidebar
-	 * block needs an explicit row. If you enable another sidebar block, add a
-	 * row to grid-template-rows above and a rule here — an unplaced block falls
-	 * into the fallback at the bottom and will overlap.
-	 */
-	#sidebarInformation {
+	#sidebar {
 		grid-column: 2;
 		grid-row: 2;
 	}
 
-	#sidebarSubscription {
-		grid-column: 2;
-		grid-row: 3;
-	}
-
-	/* Ad strip: full width, directly under main, last thing on the page */
-	#customblock-PUBLICIDAD {
+	/*
+	 * Row 3: the journal footer strip, spanning both columns below main and the
+	 * sidebar. templates/common/footer.tpl emits it as a direct child of #body —
+	 * change `1 / -1` to `1` to confine it to the main column instead.
+	 */
+	#pageFooter {
 		grid-column: 1 / -1;
-		grid-row: 4;
-	}
-
-	/* Fallback so an unplaced block stays in the sidebar column */
-	#sidebar > .block {
-		grid-column: 2;
-		grid-row: 5;
+		grid-row: 3;
 	}
 }
 
@@ -132,8 +121,25 @@
  * Hero
  * ------------------------------------------------------------------------ */
 
+/*
+ * Full-bleed to the card edge, same trick as #navbarBar: a negative margin
+ * equal to #container's horizontal padding pulls the box out to x=16/w=1248.
+ *
+ * Unlike #navbarBar there is no compensating horizontal padding, because the
+ * header's only content is the banner image, which should fill the card. The
+ * navbar needs the padding back because its content is text that has to stay
+ * aligned with #body.
+ */
 #header {
-	padding: 0 0 var(--gen-space-4);
+	margin: 0 calc(-1 * var(--gen-gutter));
+	/*
+	 * lib/pkp/styles/common.css sets `#header { width: 100% }`. With an explicit
+	 * width the negative margins would only shift the box left and leave it
+	 * 1200px wide; `auto` makes the block fill the containing box *minus* the
+	 * negative margins, giving the full 1248px.
+	 */
+	width: auto;
+	padding: 0;
 	text-align: center;
 	background: transparent;
 }

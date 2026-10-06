@@ -46,7 +46,9 @@ body {
 a {
 	color: var(--gen-primary);
 	text-decoration: none;
-	transition: color 0.15s ease;
+	transition-property: color, background-color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease;
 }
 
 a:link,
@@ -58,6 +60,7 @@ a:hover,
 a:focus {
 	color: var(--gen-primary-dark);
 	text-decoration: underline;
+  background: var(--gen-primary-light);
 }
 
 a:focus-visible {
@@ -225,4 +228,71 @@ table.listing th.headseparator {
 
 table.listing tr.highlight {
 	background: #fffbe6;
+}
+
+h4.tocSectionTitle {
+  font-size: var(--gen-size-lg) !important;
+  font-weight: 600 !important;
+  color: var(--gen-primary-dark) !important;
+}
+
+table.tocArticle {
+  padding: var(--gen-space-5) 0;
+}
+
+td.tocArticleTitleAuthors div.tocTitle {
+	font-size: var(--gen-size-lg);
+  line-height: var(--gen-leading-extra-tight);
+}
+
+td.tocArticleTitleAuthors div.tocAuthors {
+  font-size: var(--gen-size-md);
+}
+
+td.tocArticleGalleysPages div.tocPages {
+	font-size: var(--gen-size-base);
+}
+
+div#content div#articleTitle h3 {
+	font-size: var(--gen-size-xl);
+  line-height: var(--gen-leading-extra-tight);
+}
+
+div#articleHeaderInfo button {
+  background: var(--gen-primary) !important;
+}
+
+div#articleHeaderInfor button:hover {
+  background: var(--gen-primary-dark) !important;
+}
+
+div#articleHeaderInfo button:focus {
+  outline: 2px solid var(--gen-primary) !important;
+  outline-offset: 2px !important;
+}
+
+div#articleHeaderInfo svg,
+div#articleHeaderInfo span {
+  color: var(--gen-primary) !important;
+}
+
+div#articleAbstract h4,
+div#articleCitations h4,
+div#articleFullText h4, 
+div#articleSubject h4 {
+  margin: var(--gen-space-7) 0 0;
+  font-size: var(--gen-size-xl);
+  font-weight: 600;
+  color: var(--gen-primary-dark);
+}
+
+div#articleAbstract br,
+div#articleCitations br,
+div#articleFullText br, 
+div#articleSubject br {
+  display: none;
+}
+
+div#articleFullText a {
+  font-size: var(--gen-size-lg);
 }

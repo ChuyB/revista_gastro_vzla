@@ -106,10 +106,12 @@
 	display: block;
 	padding: var(--gen-space-1) 0;
 	color: var(--gen-ink);
+  text-decoration: underline;
 }
 
 .block li a:hover {
 	color: var(--gen-primary);
+  background: var(--gen-primary-light);
 }
 
 .block p {
@@ -188,4 +190,8 @@
 
 .block br + br {
 	display: none;
+}
+
+.block .blockNote {
+  text-align: left !important;
 }

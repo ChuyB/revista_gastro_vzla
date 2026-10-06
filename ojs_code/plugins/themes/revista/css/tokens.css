@@ -7,10 +7,10 @@
 
 :root {
 	/* Brand — clinical teal, reads as medical/scientific without being cold */
-	--gen-primary: #0f6f7e;
-	--gen-primary-dark: #0a525e;
+	--gen-primary: #235794;
+	--gen-primary-dark: #072f5e;
 	--gen-primary-light: #e6f4f6;
-	--gen-accent: #c8102e;
+	--gen-accent: #0a525e;
 
 	/* Neutrals */
 	--gen-ink: #1c2128;
@@ -38,6 +38,7 @@
 
 	--gen-leading: 1.6;
 	--gen-leading-tight: 1.25;
+	--gen-leading-extra-tight: 1.1;
 
 	/* Spacing scale */
 	--gen-space-1: 0.25rem;

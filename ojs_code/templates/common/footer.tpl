@@ -5,8 +5,19 @@
  * Copyright (c) 2003-2016 John Willinsky
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  *
- * Common site footer.
+ * Common site footer — Overridden for Design Refactor
  *
+ * NB: this file no longer delegates to core:common/footer.tpl. Emitting
+ * #pageFooter as a direct child of #body — below the main/sidebar row, rather
+ * than nested inside #main — is only possible in the template that closes
+ * #content / #main / #body, so that closing markup is inlined here instead of
+ * being included. That keeps lib/pkp/ pristine, at the cost of having to track
+ * core changes by hand.
+ *
+ * On upgrade: diff this file against lib/pkp/templates/common/footer.tpl and
+ * re-apply anything the new version adds (hooks, debug info, extra markup).
+ *
+ * @see plugins/themes/revista/css/layout.css — #pageFooter grid placement
  *}
 
 <div class="sponsors-footer-section">
@@ -33,5 +44,22 @@
 	{/if}
 {/if}
 
-{include file="core:common/footer.tpl"}
+{if $displayCreativeCommons}
+	{translate key="common.ccLicense"}
+{/if}
+{call_hook name="Templates::Common::Footer::PageFooter"}
+</div><!-- content -->
+</div><!-- main -->
+
+{if $pageFooter}
+	<div id="pageFooter">{$pageFooter}</div>
+{/if}
+</div><!-- body -->
+
+{get_debug_info}
+{if $enableDebugStats}{include file=$pqpTemplate}{/if}
+
+</div><!-- container -->
+</body>
+</html>
 {/strip}

@@ -479,7 +479,9 @@
   #headerTitle h1 {
     width: 100% !important;
     font-size: 1.15em !important;
-    padding: 12px 15px !important;
+    /* Horizontal padding removed so the banner reaches the card edge here,
+     * matching the full-bleed #header in the revista theme (layout.css). */
+    padding: 12px 0 !important;
     text-align: center !important;
     margin: 0 !important;
     display: block !important;
