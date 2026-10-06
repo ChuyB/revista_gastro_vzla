@@ -1,0 +1,228 @@
+/**
+ * plugins/themes/revista/css/base.css
+ *
+ * Resets the legacy typography and the #container constraints that
+ * lib/pkp/styles/common.css and styles/common.css impose.
+ */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background: var(--gen-canvas);
+	color: var(--gen-ink);
+	font-family: var(--gen-font);
+	font-size: var(--gen-size-base);
+	line-height: var(--gen-leading);
+	-webkit-font-smoothing: antialiased;
+}
+
+/*
+ * lib/pkp/styles/common.css sets #container { min-width: 730px !important;
+ * text-align: center }. The min-width blocks the layout from ever going
+ * narrow and the inherited centering leaks into every descendant.
+ */
+#container {
+	min-width: 0 !important;
+	max-width: var(--gen-max-width);
+	margin: 0 auto;
+	padding: 0 var(--gen-gutter) var(--gen-space-6);
+	text-align: left;
+	background: var(--gen-surface);
+	box-shadow: var(--gen-shadow);
+}
+
+/* --- Links --------------------------------------------------------------- */
+
+a {
+	color: var(--gen-primary);
+	text-decoration: none;
+	transition: color 0.15s ease;
+}
+
+a:link,
+a:visited {
+	color: var(--gen-primary);
+}
+
+a:hover,
+a:focus {
+	color: var(--gen-primary-dark);
+	text-decoration: underline;
+}
+
+a:focus-visible {
+	outline: 2px solid var(--gen-primary);
+	outline-offset: 2px;
+}
+
+/* --- Headings ------------------------------------------------------------ */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0 0 var(--gen-space-3);
+	font-family: var(--gen-font-heading);
+	font-weight: 600;
+	line-height: var(--gen-leading-tight);
+	color: var(--gen-ink);
+}
+
+/*
+ * The generic h1..h6 rule above is only (0,0,1), so it loses to the
+ * `#content h1`, `#main h2`, `#content h3` etc. rules in
+ * lib/pkp/styles/common.css, which set Georgia. font-family therefore has to be
+ * restated at matching specificity on each of those selectors.
+ */
+
+/* #main h2 / #main h3 / #content h3 are set in Georgia with odd margins by
+ * lib/pkp/styles/common.css; the page title block is restyled in layout.css */
+#main h1,
+#main h2,
+#main h3 {
+	margin: 0 0 var(--gen-space-4);
+	padding: 0;
+	font-family: var(--gen-font-heading);
+	font-size: var(--gen-size-xl);
+	font-weight: 700;
+	letter-spacing: -0.01em;
+	text-transform: none;
+}
+
+#main h3 {
+	font-size: var(--gen-size-lg);
+}
+
+#content h1,
+#content h2,
+#content h3 {
+	margin: var(--gen-space-5) 0 var(--gen-space-2);
+	padding: 0;
+	font-family: var(--gen-font-heading);
+	font-size: var(--gen-size-md);
+	font-weight: 600;
+	text-transform: none;
+}
+
+#content h2 {
+	font-size: var(--gen-size-lg);
+}
+
+#content h4,
+#content h5,
+#content h6 {
+	margin: var(--gen-space-4) 0 var(--gen-space-2);
+	padding: 0;
+	font-family: var(--gen-font-heading);
+	font-size: var(--gen-size-base);
+	text-transform: none;
+}
+
+/* --- Forms --------------------------------------------------------------- */
+
+input.textField,
+input[type="text"],
+input[type="password"],
+input[type="email"],
+select.selectMenu,
+select {
+	max-width: 100%;
+	padding: var(--gen-space-2) var(--gen-space-3);
+	border: 1px solid var(--gen-line);
+	border-radius: var(--gen-radius-sm);
+	background: var(--gen-surface);
+	color: var(--gen-ink);
+	font-family: inherit;
+	font-size: var(--gen-size-base);
+	line-height: 1.4;
+}
+
+input.textField:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+select:focus {
+	border-color: var(--gen-primary);
+	outline: 2px solid var(--gen-primary-light);
+	outline-offset: 0;
+}
+
+input.button,
+button[type="submit"],
+input[type="submit"] {
+	display: inline-block;
+	padding: var(--gen-space-2) var(--gen-space-4);
+	border: 1px solid var(--gen-primary);
+	border-radius: var(--gen-radius-sm);
+	background: var(--gen-primary);
+	color: #fff;
+	font-family: inherit;
+	font-size: var(--gen-size-sm);
+	font-weight: 600;
+	line-height: 1.4;
+	cursor: pointer;
+	transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+input.button:hover,
+button[type="submit"]:hover,
+input[type="submit"]:hover {
+	background: var(--gen-primary-dark);
+	border-color: var(--gen-primary-dark);
+	color: #fff;
+	text-decoration: none;
+}
+
+label {
+	color: var(--gen-ink-soft);
+	font-size: var(--gen-size-sm);
+}
+
+label.error,
+span.formError {
+	color: var(--gen-accent);
+}
+
+/* --- Misc ---------------------------------------------------------------- */
+
+/* #content carries a 0.7em font-size and a dotted border from
+ * lib/pkp/styles/common.css; both fight the scale above */
+#content {
+	margin: 0;
+	padding: 0;
+	border-top: 0;
+	font-size: inherit;
+}
+
+table.listing {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+table.listing td,
+table.listing th {
+	padding: var(--gen-space-2) var(--gen-space-3);
+	border-bottom: 1px solid var(--gen-line-soft);
+	font-size: var(--gen-size-base);
+	text-align: left;
+}
+
+table.listing td.headseparator,
+table.listing th.headseparator {
+	border-top: 2px solid var(--gen-line);
+}
+
+table.listing tr.highlight {
+	background: #fffbe6;
+}

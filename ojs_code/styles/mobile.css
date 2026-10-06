@@ -46,6 +46,126 @@
     margin: 0 !important;
   }
 
+  /* NAVBAR STRIP
+   *
+   * templates/common/header.tpl and templates/article/header.tpl render
+   * #navbarBar as the first child of #body, holding common/navbar.tpl plus the
+   * left sidebar blocks (#sidebarUser, #sidebarNavigation).
+   *
+   * The box itself is styled further down as the hamburger overlay; the rules
+   * here lay out its contents. The two dropdown blocks behave as accordions
+   * inside the panel: plugins/themes/revista/css/dropdown.css keeps .blockPanel
+   * in normal flow below 801px, so tapping .blockToggle expands it in place and
+   * the .is-open class set by plugins/themes/revista/js/navbar.js does the rest.
+   *
+   * #menuToggle must remain the element immediately preceding #container for
+   * `#menuToggle:checked ~ #container #body #navbarBar` to match.
+   */
+  #navbarBar > #navbar {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  #navbarBar > #leftSidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0;
+  }
+
+  #navbarBar .block {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    font-size: 0.85rem !important;
+  }
+
+  #navbarBar .blockToggle {
+    width: 100% !important;
+    padding: 12px 0 !important;
+    border-bottom: 1px solid #d5dde3 !important;
+    font-size: 0.95rem !important;
+    text-align: left;
+  }
+
+  /* Expanded panel contents get comfortable tap targets */
+  #navbarBar .block.is-open .blockPanel {
+    padding: 12px 0 4px !important;
+  }
+
+  #navbarBar .block input[type="text"],
+  #navbarBar .block input[type="password"],
+  #navbarBar .block select {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 45px !important; /* Bigger tap targets for mobile */
+    margin: 6px 0 !important;
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+    -webkit-appearance: none;
+  }
+
+  #navbarBar .block input.button {
+    width: 100% !important;
+    padding: 12px !important;
+    background: #003366 !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 4px !important;
+    margin: 10px 0 0 !important;
+  }
+
+  #navbarBar .block table {
+    width: 100% !important;
+    border-collapse: collapse;
+  }
+
+  #navbarBar .block table td {
+    display: block !important;
+    padding: 0 0 8px !important;
+    border: 0 !important;
+    text-align: left;
+  }
+
+  #navbarBar .block input[type="checkbox"] {
+    width: auto !important;
+    height: auto !important;
+    margin-right: 6px !important;
+    vertical-align: middle;
+  }
+
+  #navbarBar .block ul {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  #navbarBar .block li {
+    padding: 8px 0 !important;
+    border-bottom: 1px solid #eee !important;
+  }
+
+  #navbarBar .block li:last-child {
+    border-bottom: 0 !important;
+  }
+
+  #navbarBar .block a {
+    text-decoration: none !important;
+    color: #003366 !important;
+    font-weight: 500 !important;
+    display: block !important;
+  }
+
+  #navbarBar .block br + br {
+    display: none !important;
+  }
+
   #navbar ul {
     display: flex;
     flex-wrap: wrap;
@@ -85,8 +205,15 @@
     padding: 15px !important;
   }
 
-  /* HAMBURGER MENU OVERLAY */
-  #sidebar {
+  /* HAMBURGER MENU OVERLAY — moved from #sidebar to #navbarBar.
+   *
+   * templates/common/header.tpl and templates/article/header.tpl now render the
+   * left sidebar blocks (user, navigation) inside #navbarBar, so #sidebar holds
+   * only the right sidebar blocks. Leaving the overlay on #sidebar would give
+   * the hamburger a near-empty panel and hide #customblock-PUBLICIDAD, which
+   * needs to render as a full-width strip under #main, not inside a menu.
+   */
+  #navbarBar {
     display: none;
     position: fixed;
     top: 0;
@@ -98,6 +225,24 @@
     z-index: 1500 !important;
     padding: 80px 25px 40px 25px !important;
     overflow-y: auto !important;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #menuToggle:checked ~ #container #body #navbarBar {
+    display: flex !important;
+  }
+
+  /* Right sidebar blocks flow inline under #main instead of into the overlay */
+  #sidebar {
+    order: 2;
+    position: static;
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+    background: transparent !important;
+    padding: 0 15px !important;
+    overflow: visible !important;
   }
 
   #leftSidebar,
@@ -109,13 +254,9 @@
     background: transparent !important;
   }
 
-  #menuToggle:checked ~ #container #body #sidebar {
-    display: block !important;
-  }
-
   /* MENU ITEM STYLING - FORCING RESPONSIVENESS */
   #sidebar .block {
-    display: none;
+    display: block;
     margin-bottom: 35px !important;
     width: 100% !important;
     border: none !important;
@@ -123,17 +264,20 @@
     background: transparent !important;
   }
 
-  /* SHOW ONLY REQUESTED BLOCKS */
-  #sidebar #sidebarUser,
-  #sidebar #sidebarNavigation,
-  #sidebar #sidebarInformation,
-  #sidebar #customblock-PUBLICIDAD-left,
-  #sidebar #publicidad-left {
-    display: block !important;
+  /* The ad strip keeps the theme's flex layout and its own inner styling; it is
+   * a full-width block under #main, not a menu item. */
+  #sidebar #customblock-PUBLICIDAD {
+    display: flex !important;
+    padding: var(--gen-space-4) !important;
+    margin-top: 10px;
+  }
+
+  #sidebar #customblock-PUBLICIDAD iframe {
+    min-height: 24rem;
   }
 
   /* Aggressively fix tables/divs inside blocks */
-  #sidebar .block * {
+  #sidebarInformation * {
     max-width: 100% !important;
     width: auto !important;
     height: auto !important;
@@ -144,19 +288,19 @@
   }
 
   /* Specific fix for divs with hardcoded large widths */
-  #sidebar .block div {
+  #sidebarInformation div {
     width: 100% !important;
   }
 
-  #sidebar .block table {
+  #sidebarInformation table {
     width: 100% !important;
     display: block !important;
   }
 
-  #sidebar .block tbody,
-  #sidebar .blockTitle,
-  #sidebar .block td,
-  #sidebar .block tr {
+  #sidebarInformation tbody,
+  #sidebarInformation .blockTitle,
+  #sidebarInformation .block td,
+  #sidebarInformation .block tr {
     width: 100% !important;
     display: block !important;
     box-sizing: border-box !important;
@@ -164,7 +308,7 @@
     overflow: visible !important;
   }
 
-  #sidebar .blockTitle {
+  #sidebarInformation .blockTitle {
     font-size: 1.2em !important;
     font-weight: bold !important;
     color: #003366 !important;
@@ -177,9 +321,9 @@
     word-wrap: break-word !important;
   }
 
-  #sidebar input[type="text"],
-  #sidebar input[type="password"],
-  #sidebar select {
+  #sidebarInformation input[type="text"],
+  #sidebarInformation input[type="password"],
+  #sidebarInformation select {
     width: 100% !important;
     max-width: 100% !important;
     height: 45px !important; /* Bigger tap targets for mobile */
@@ -187,7 +331,7 @@
     -webkit-appearance: none;
   }
 
-  #sidebar .button {
+  #sidebarInformation .button {
     width: 100% !important;
     padding: 12px !important;
     background: #003366 !important;
@@ -197,24 +341,24 @@
     margin-top: 10px !important;
   }
 
-  #sidebar img {
+  #sidebarInformation img {
     max-width: 80% !important;
     margin: 10px 0 !important;
     display: block !important;
   }
 
-  #sidebar ul {
+  #sidebarInformation ul {
     list-style: none !important;
     padding: 0 !important;
     margin: 0 !important;
   }
 
-  #sidebar li {
+  #sidebarInformation li {
     padding: 12px 0 !important;
     border-bottom: 1px solid #eee !important;
   }
 
-  #sidebar a {
+  #sidebarInformation a {
     text-decoration: none !important;
     color: #003366 !important;
     font-weight: 500 !important;

@@ -158,23 +158,40 @@
 
 <div id="body">
 
-{if $leftSidebarCode || $rightSidebarCode}
+{**
+  * Navbar strip: full-width navigation row beneath the hero.
+  *
+  * The left sidebar blocks (user, navigation) are rendered here rather than
+  * inside #sidebar so plugins/themes/revista can style them as dropdown
+  * triggers in the navbar. #sidebar and #rightSidebar are left to the grid;
+  * both are set to `display: contents` from 801px up in the theme.
+  *
+  * NB: #menuToggle must stay the element immediately preceding #container, or
+  * the mobile hamburger selector in styles/mobile.css stops matching.
+  *
+  * @see templates/article/header.tpl for the mirrored version of this markup
+  * @see plugins/themes/revista/css/layout.css
+  * @see plugins/themes/revista/css/dropdown.css
+  * @see styles/mobile.css
+  */}
+<div id="navbarBar">
+{include file="common/navbar.tpl"}
+{if $leftSidebarCode}
+	<div id="leftSidebar">
+		{$leftSidebarCode}
+	</div>
+{/if}
+</div>
+
+{if $rightSidebarCode}
 	<div id="sidebar">
-		{if $leftSidebarCode}
-			<div id="leftSidebar">
-				{$leftSidebarCode}
-			</div>
-		{/if}
-		{if $rightSidebarCode}
-			<div id="rightSidebar">
-				{$rightSidebarCode}
-			</div>
-		{/if}
+		<div id="rightSidebar">
+			{$rightSidebarCode}
+		</div>
 	</div>
 {/if}
 
 <div id="main">
-{include file="common/navbar.tpl"}
 
 {include file="common/breadcrumbs.tpl"}
 

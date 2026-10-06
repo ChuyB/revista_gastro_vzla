@@ -9,7 +9,7 @@
  *
  *}
 <div class="block" id="sidebarLayoutEditor">
-	<span class="blockTitle">{translate key="user.role.layoutEditor"}</span>
+	<h2 class="blockTitle">{translate key="user.role.layoutEditor"}</h2>
 	<span class="blockSubtitle">{translate key="article.submissions"}</span>
 	<ul>
 		<li><a href="{url op="submissions" path="active"}">{translate key="common.queue.short.active"}</a>&nbsp;({if $submissionsCount[0]}{$submissionsCount[0]}{else}0{/if})</li>

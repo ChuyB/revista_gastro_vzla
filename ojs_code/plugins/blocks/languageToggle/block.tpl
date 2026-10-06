@@ -24,7 +24,7 @@
 		{rdelim}
 		//-->
 	</script>
-	<span class="blockTitle">{translate key="common.language"}</span>
+	<h2 class="blockTitle">{translate key="common.language"}</h2>
 	<form action="#">
 		<label for="languageSelect">{translate key="plugins.block.languageToggle.selectLabel"}</label>
 		<select id="languageSelect" {if $isPostRequest}disabled="disabled" {/if}size="1" name="locale" class="selectMenu">{html_options options=$languageToggleLocales selected=$currentLocale}</select>

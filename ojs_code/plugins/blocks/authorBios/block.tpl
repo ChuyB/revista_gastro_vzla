@@ -10,13 +10,13 @@
  *}
 
 <div class="block" id="sidebarRTAuthorBios">
-	<span class="blockTitle">
+	<h2 class="blockTitle">
 		{if count($article->getAuthors()) gt 1}
 			{translate key="plugins.block.authorBios.aboutTheAuthors"}
 		{else}
 			{translate key="plugins.block.authorBios.aboutTheAuthor"}
 		{/if}
-	</span>
+	</h2>
 	{foreach from=$article->getAuthors() item=author name=authors}
 	<div class="authorBio">
 	<p>

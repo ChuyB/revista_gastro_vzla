@@ -1,0 +1,22 @@
+/**
+ * plugins/themes/revista/revista.css
+ *
+ * Revista GEN theme.
+ *
+ * Loaded by the theme plugin through PKPTemplateManager::addStyleSheet(), which
+ * header.tpl renders in the {foreach from=$stylesheets} loop. That places this
+ * file AFTER styles/sidebar.css, leftSidebar.css, rightSidebar.css and
+ * bothSidebars.css, so it overrides the legacy float/width layout. It is loaded
+ * BEFORE styles/mobile.css, which stays authoritative below 801px.
+ *
+ * Load order within this file matters: tokens -> base -> layout -> navbar ->
+ * blocks -> dropdown -> publicidad.
+ */
+
+@import url("css/tokens.css");
+@import url("css/base.css");
+@import url("css/layout.css");
+@import url("css/navbar.css");
+@import url("css/blocks.css");
+@import url("css/dropdown.css");
+@import url("css/publicidad.css");

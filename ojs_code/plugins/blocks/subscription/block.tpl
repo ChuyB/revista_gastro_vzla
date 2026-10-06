@@ -9,7 +9,7 @@
  *
  *}
 <div class="block" id="sidebarSubscription">
-	<span class="blockTitle">{translate key="plugins.block.subscription.blockTitle"}</span>
+	<h2 class="blockTitle">{translate key="plugins.block.subscription.blockTitle"}</h2>
 	{if $individualSubscription}
 		{assign var=individualSubscriptionValid value=$individualSubscription->isValid()}
 	{else}

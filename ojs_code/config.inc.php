@@ -96,7 +96,10 @@ restful_urls = Off
 trust_x_forwarded_for = Off
 
 ; Allow javascript files to be served through a content delivery network (set to off to use local files)
-enable_cdn = On
+; Off: the container has no outbound internet access, so google.com/jsapi never loads and
+; header.tpl's document.write fallback does not rescue jQuery. Every jQuery plugin then
+; throws "jQuery is not defined". Local jQuery is present at lib/pkp/js/lib/jquery/.
+enable_cdn = Off
 
 ; Set the maximum number of citation checking processes that may run in parallel.
 ; Too high a value can increase server load and lead to too many parallel outgoing

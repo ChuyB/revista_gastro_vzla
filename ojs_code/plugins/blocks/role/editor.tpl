@@ -10,7 +10,7 @@
  *
  *}
 <div class="block" id="sidebarEditor">
-	<span class="blockTitle">{translate key="user.role.editor"}</span>
+	<h2 class="blockTitle">{translate key="user.role.editor"}</h2>
 
 	<span class="blockSubtitle">{translate key="article.submissions"}</span>
 	<ul>

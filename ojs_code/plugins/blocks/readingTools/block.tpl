@@ -13,7 +13,7 @@
 
 <div class="block" id="sidebarRTArticleTools">
 
-	<span class="blockTitle">{translate key="plugins.block.readingTools.articleTools"}</span>
+	<h2 class="blockTitle">{translate key="plugins.block.readingTools.articleTools"}</h2>
 	{if $journalRt->getAbstract() && $galley && $article->getLocalizedAbstract()}
 		<div class="articleToolItem">
 			<img src="{$baseUrl}/plugins/blocks/readingTools/icons/abstract.png" class="articleToolIcon" alt="" /> <a href="{url page="article" op="view" path=$articleId}" target="_parent">{translate key="article.abstract"}</a><br />

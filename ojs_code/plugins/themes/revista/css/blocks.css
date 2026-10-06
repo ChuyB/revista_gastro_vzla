@@ -1,0 +1,191 @@
+/**
+ * plugins/themes/revista/css/blocks.css
+ *
+ * Sidebar block cards.
+ *
+ * Targets `.block` rather than `#sidebar .block` because the sidebar blocks
+ * that became navbar dropdowns now live inside #navbarBar, outside #sidebar.
+ */
+
+.block {
+	margin: 0 0 var(--gen-space-4);
+	padding: var(--gen-space-4);
+	border: 1px solid var(--gen-line);
+	border-radius: var(--gen-radius);
+	background: var(--gen-surface);
+	color: var(--gen-ink);
+	font-size: var(--gen-size-sm);
+	line-height: var(--gen-leading);
+}
+
+/* styles/sidebar.css sets #sidebar div.block { font-size: 1.2em }, which the
+ * dropdown panels would inherit and blow up */
+.block,
+#sidebar div.block,
+#navbarBar .block {
+	font-size: var(--gen-size-sm);
+	color: var(--gen-ink);
+}
+
+/*
+ * Block titles.
+ *
+ * Tier 1 converted span.blockTitle to h2.blockTitle in the block templates,
+ * so h2 default margins (0.83em) have to be reset. styles/sidebar.css also
+ * declares `border: 1em`, an invalid shorthand that resolves to a 1em solid
+ * border on all four sides in the current text colour.
+ */
+.block .blockTitle {
+	display: block;
+	margin: 0 0 var(--gen-space-3);
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: var(--gen-ink);
+	font-size: var(--gen-size-sm);
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	line-height: var(--gen-leading-tight);
+	text-transform: uppercase;
+}
+
+.block .blockSubtitle {
+	display: block;
+	margin: var(--gen-space-3) 0 var(--gen-space-2);
+	color: var(--gen-ink-soft);
+	font-size: var(--gen-size-xs);
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+/*
+ * Subordinate titles. plugins/blocks/user/block.tpl uses h3.blockTitle for the
+ * implicit-auth section labels so the heading order under the h2 stays valid.
+ * The h2/h3 rules above set margin/size in em on the element, so reset them
+ * here rather than relying on a descendant selector.
+ */
+.block h3.blockTitle {
+	margin: var(--gen-space-4) 0 var(--gen-space-2);
+	font-size: var(--gen-size-xs);
+}
+
+/* The dropdown trigger button must not inherit the form-button styling in
+ * base.css — navbar.css/dropdown.css restyle it, this just clears the base. */
+.blockTitle .blockToggle {
+	display: inline;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	line-height: inherit;
+	text-align: left;
+}
+
+/* --- Block contents ------------------------------------------------------- */
+
+.block ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.block li {
+	margin: 0 0 var(--gen-space-1);
+	padding: 0;
+	list-style: none;
+}
+
+.block li:last-child {
+	margin-bottom: 0;
+}
+
+.block li a {
+	display: block;
+	padding: var(--gen-space-1) 0;
+	color: var(--gen-ink);
+}
+
+.block li a:hover {
+	color: var(--gen-primary);
+}
+
+.block p {
+	margin: 0 0 var(--gen-space-2);
+}
+
+.block p:last-child {
+	margin-bottom: 0;
+}
+
+.block img {
+	max-width: 100%;
+	height: auto;
+}
+
+/* --- Specific blocks ------------------------------------------------------ */
+
+/* developedBy uses <a class="blockTitle"> rather than a span */
+#sidebarDevelopedBy .blockTitle {
+	display: block;
+	color: var(--gen-ink-faint);
+	font-size: var(--gen-size-xs);
+	text-decoration: none;
+}
+
+#sidebarDevelopedBy .blockTitle:hover {
+	color: var(--gen-primary);
+}
+
+/* styles/sidebar.css targets #developedBy with a hard-coded pixel size */
+#developedBy {
+	font-size: var(--gen-size-xs);
+	text-transform: none;
+}
+
+/* --- Tables inside blocks -------------------------------------------------
+ *
+ * The search and login forms in plugins/blocks/navigation and
+ * plugins/blocks/user are laid out with <table>. Neutralise the table
+ * presentation so they can be styled as a stacked form; the markup itself is
+ * left alone.
+ * ------------------------------------------------------------------------ */
+
+.block table {
+	width: 100%;
+	border: 0;
+	border-collapse: collapse;
+	margin: 0;
+}
+
+.block table td,
+.block table th {
+	padding: 0 0 var(--gen-space-2);
+	border: 0;
+	text-align: left;
+	vertical-align: top;
+	font-size: inherit;
+}
+
+.block label {
+	display: block;
+	margin: 0 0 var(--gen-space-1);
+	font-size: var(--gen-size-xs);
+	font-weight: 600;
+}
+
+.block input[type="checkbox"] + label,
+.block td label {
+	display: inline-block;
+}
+
+.block input[type="text"],
+.block input[type="password"] {
+	width: 100%;
+}
+
+.block br + br {
+	display: none;
+}

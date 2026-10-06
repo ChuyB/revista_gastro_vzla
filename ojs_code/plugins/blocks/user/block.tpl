@@ -10,9 +10,15 @@
  *}
 <div class="block" id="sidebarUser">
 	{if !$implicitAuth || $implicitAuth === $smarty.const.IMPLICIT_AUTH_OPTIONAL}
-		<span class="blockTitle">{translate key="navigation.user"}</span>
+		{* Navbar dropdown trigger. The button carries the accessible state;
+		 * js/navbar.js and css/dropdown.css style the rest of the block as the
+		 * panel. @see plugins/themes/revista/js/navbar.js *}
+		<h2 class="blockTitle"><button type="button" class="blockToggle" aria-expanded="false">{translate key="navigation.user"}</button></h2>
 	{/if}
 
+	{* Dropdown panel. The wrapper gives the panel a single positioning context,
+	 * so its children lay out in normal flow. @see plugins/themes/revista/css/dropdown.css *}
+	<div class="blockPanel">
 	{if $isUserLoggedIn}
 		{translate key="plugins.block.user.loggedInAs"}<br />
 		<strong>{$loggedInUsername|escape}</strong>
@@ -29,11 +35,11 @@
 	{else}
 		{if $implicitAuth}
 			{if $implicitAuth === $smarty.const.IMPLICIT_AUTH_OPTIONAL}
-				<span class="blockTitle">{translate key="user.login.implicitAuth"}</span>
+				<h3 class="blockTitle">{translate key="user.login.implicitAuth"}</h3>
 			{/if}
 			<a href="{url page="login" op="implicitAuthLogin"}">{translate key="plugins.block.user.implicitAuthLogin"}</a>
 			{if $implicitAuth === $smarty.const.IMPLICIT_AUTH_OPTIONAL}
-				<span class="blockTitle">{translate key="user.login.localAuth"}</span>
+				<h3 class="blockTitle">{translate key="user.login.localAuth"}</h3>
 			{/if}
 		{/if}
 		{if !$implicitAuth || $implicitAuth === $smarty.const.IMPLICIT_AUTH_OPTIONAL}
@@ -61,4 +67,5 @@
 			{/if}
 		{/if}
 	{/if}
+	</div>
 </div>

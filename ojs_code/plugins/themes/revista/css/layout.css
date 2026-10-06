@@ -1,0 +1,236 @@
+/**
+ * plugins/themes/revista/css/layout.css
+ *
+ * Replaces the legacy float layout with CSS Grid.
+ *
+ * The legacy files styles/leftSidebar.css, rightSidebar.css and
+ * bothSidebars.css float #leftSidebar / #rightSidebar and size #main to 47%.
+ * Those declarations are neutralised unconditionally below; the grid is then
+ * applied from 801px up, which is the breakpoint styles/mobile.css uses for
+ * its own single-column overlay.
+ */
+
+/* --------------------------------------------------------------------------
+ * Legacy float/width neutralisation (all widths)
+ *
+ * bothSidebars.css declares `margin-right: 0 !important`, so that one property
+ * needs !important here too or it will survive.
+ * ------------------------------------------------------------------------ */
+
+#body {
+	width: 100%;
+	text-align: left;
+}
+
+#sidebar {
+	float: none;
+	display: block;
+	width: 100%;
+	height: auto;
+	margin: 0;
+	padding: 0;
+}
+
+#leftSidebar,
+#rightSidebar {
+	float: none !important;
+	display: block;
+	width: auto !important;
+	max-width: none;
+	height: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+	overflow: visible;
+}
+
+#main {
+	float: none !important;
+	position: static !important;
+	display: block;
+	width: 100% !important;
+	max-width: none;
+	margin: 0 !important;
+	padding: 0 0 var(--gen-space-6) 0 !important;
+	overflow: visible;
+}
+
+/* --------------------------------------------------------------------------
+ * Desktop grid (>= 801px)
+ * ------------------------------------------------------------------------ */
+
+@media (min-width: 801px) {
+	#body {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) var(--gen-sidebar-width);
+		grid-template-rows: auto 1fr auto auto;
+		align-items: start;
+		column-gap: var(--gen-space-6);
+		row-gap: var(--gen-space-5);
+	}
+
+	/*
+	 * Dissolve the sidebar wrappers so each block becomes an individually
+	 * placeable grid item. Safe on <div>: no ARIA role is lost.
+	 */
+	#sidebar,
+	#rightSidebar {
+		display: contents;
+	}
+
+	/* Row 1: full-width navbar strip (hero image sits above this in #header) */
+	#navbarBar {
+		grid-column: 1 / -1;
+		grid-row: 1;
+		display: flex;
+		align-items: stretch;
+		gap: var(--gen-space-2);
+		min-height: var(--gen-navbar-height);
+		margin: 0 calc(-1 * var(--gen-gutter));
+		padding: 0 var(--gen-gutter);
+		border-bottom: 1px solid var(--gen-line);
+		background: var(--gen-surface-alt);
+	}
+
+	/* Rows 2-3: main spans both so the sidebar column stacks independently */
+	#main {
+		grid-column: 1;
+		grid-row: 2 / 4;
+	}
+
+	/*
+	 * Block placement map.
+	 *
+	 * CSS Grid cannot stack several items in a single cell, so every sidebar
+	 * block needs an explicit row. If you enable another sidebar block, add a
+	 * row to grid-template-rows above and a rule here — an unplaced block falls
+	 * into the fallback at the bottom and will overlap.
+	 */
+	#sidebarInformation {
+		grid-column: 2;
+		grid-row: 2;
+	}
+
+	#sidebarSubscription {
+		grid-column: 2;
+		grid-row: 3;
+	}
+
+	/* Ad strip: full width, directly under main, last thing on the page */
+	#customblock-PUBLICIDAD {
+		grid-column: 1 / -1;
+		grid-row: 4;
+	}
+
+	/* Fallback so an unplaced block stays in the sidebar column */
+	#sidebar > .block {
+		grid-column: 2;
+		grid-row: 5;
+	}
+}
+
+/* --------------------------------------------------------------------------
+ * Hero
+ * ------------------------------------------------------------------------ */
+
+#header {
+	padding: 0 0 var(--gen-space-4);
+	text-align: center;
+	background: transparent;
+}
+
+/* lib/pkp sets `padding: .5em 0 .25em 10%` here; the banner image should be
+ * flush with the container */
+#header h1 {
+	margin: 0;
+	padding: 0;
+	font-size: inherit;
+	font-weight: normal;
+	line-height: normal;
+	text-transform: none;
+	letter-spacing: normal;
+	background: none;
+	color: inherit;
+}
+
+#headerTitle {
+	display: block;
+	width: 100%;
+	max-width: none;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+#headerTitle img {
+	display: block;
+	width: 100%;
+	height: auto;
+	max-width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+ * Breadcrumbs
+ * ------------------------------------------------------------------------ */
+
+#breadcrumb {
+	margin: 0 0 var(--gen-space-4);
+	padding: 0 0 var(--gen-space-2);
+	border: 0;
+	border-bottom: 1px solid var(--gen-line-soft);
+	color: var(--gen-ink-faint);
+	font-size: var(--gen-size-xs);
+	font-style: normal;
+	text-align: left;
+}
+
+#breadcrumb a {
+	color: var(--gen-ink-soft);
+}
+
+#breadcrumb a.current {
+	color: var(--gen-ink);
+	font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+ * Sponsors footer
+ *
+ * There is no #footer / #footerContent element in any OJS template, so the
+ * #footer rules in lib/pkp/styles/common.css and classicBlue.css are dead. The
+ * real footer is the sponsors block, which renders inside #content.
+ * ------------------------------------------------------------------------ */
+
+.sponsors-footer-section {
+	margin: var(--gen-space-6) 0 0;
+	padding: var(--gen-space-4) 0 0;
+	border-top: 1px solid var(--gen-line);
+}
+
+.sponsors-title {
+	margin: 0 0 var(--gen-space-3);
+	color: var(--gen-ink-faint);
+	font-size: var(--gen-size-xs);
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.sponsors-grid {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: var(--gen-space-4);
+}
+
+.sponsor-item img {
+	display: block;
+	max-height: 3rem;
+	width: auto;
+}
+
+#pageFooter {
+	margin-top: var(--gen-space-4);
+	color: var(--gen-ink-faint);
+	font-size: var(--gen-size-xs);
+}

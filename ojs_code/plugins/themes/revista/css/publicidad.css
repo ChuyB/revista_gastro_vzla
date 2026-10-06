@@ -1,0 +1,85 @@
+/**
+ * plugins/themes/revista/css/publicidad.css
+ *
+ * The ad strip (#customblock-PUBLICIDAD) sits in grid row 4, full width,
+ * directly under #main.
+ *
+ * The block content is authored in the Custom Block Manager UI and stored in
+ * plugin_settings.blockContent as a PHP-serialised string. It carries heavy
+ * inline styles which outrank any stylesheet rule:
+ *
+ *   <div style="width: 150%; max-width: 800px; margin: auto; ...">
+ *   <iframe style="height: 50%; min-height: 700px; ... width: 100%">
+ *   <div style="background-color: #e8e8e8; padding: 10px;">
+ *
+ * `width: 150%` inside a full-width grid row would overflow the viewport, so
+ * those two declarations are neutralised here with !important. Everything else
+ * is left alone — the inner styling is the editor's decision, not the theme's.
+ */
+
+#customblock-PUBLICIDAD {
+	grid-column: 1 / -1;
+	grid-row: 4;
+}
+
+/* --- Strip ---------------------------------------------------------------- */
+
+#customblock-PUBLICIDAD.block {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: var(--gen-space-4);
+	margin: 0;
+	padding: var(--gen-space-5) var(--gen-gutter);
+	border: 1px solid var(--gen-line);
+	border-radius: var(--gen-radius);
+	background: var(--gen-surface-alt);
+}
+
+/*
+ * Neutralise `width: 150%` / `max-width: 800px` on the editor's wrapper and let
+ * the strip decide. flex-wrap is on the parent so the inner block wraps onto
+ * its own line rather than overflowing if the embed is wider than the column.
+ */
+#customblock-PUBLICIDAD > div {
+	width: 100% !important;
+	max-width: 46rem !important;
+	margin: 0 auto !important;
+}
+
+/* The chatbot embed sets height:50% which resolves against an auto-height
+ * parent; give it a sane floor and let it grow */
+#customblock-PUBLICIDAD iframe {
+	width: 100% !important;
+	max-width: 100%;
+	min-height: 32rem;
+	height: auto !important;
+	border: 0;
+	border-radius: var(--gen-radius-sm);
+	background: var(--gen-surface);
+}
+
+/* The editor reuses .blockTitle inside the ad copy; make it read as a label
+ * rather than a sidebar heading */
+#customblock-PUBLICIDAD .blockTitle {
+	display: block;
+	margin: 0 0 var(--gen-space-2);
+	padding: 0;
+	border: 0;
+	background: transparent !important;
+	color: var(--gen-ink);
+	font-size: var(--gen-size-md);
+	font-weight: 700;
+	letter-spacing: 0;
+	text-transform: none;
+}
+
+#customblock-PUBLICIDAD p {
+	margin: 0 0 var(--gen-space-3);
+}
+
+#customblock-PUBLICIDAD img {
+	max-width: 100%;
+	height: auto;
+}

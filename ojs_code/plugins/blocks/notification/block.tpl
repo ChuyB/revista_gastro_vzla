@@ -10,7 +10,7 @@
  *}
  {if $currentJournal}
 <div class="block" id="notification">
-	<span class="blockTitle">{translate key="notification.notifications"}</span>
+	<h2 class="blockTitle">{translate key="notification.notifications"}</h2>
 	<ul>
 		{if $isUserLoggedIn}
 			<li><a href="{url page="notification"}">{translate key="common.view"}</a>

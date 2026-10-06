@@ -108,24 +108,33 @@
 
 <div id="body">
 
-{if $leftSidebarCode || $rightSidebarCode}
+{**
+  * Navbar strip: full-width navigation row beneath the hero.
+  *
+  * Mirrors templates/common/header.tpl — keep the two in sync.
+  *
+  * @see plugins/themes/revista/css/layout.css
+  * @see plugins/themes/revista/css/dropdown.css
+  * @see styles/mobile.css
+  */}
+<div id="navbarBar">
+{include file="common/navbar.tpl"}
+{if $leftSidebarCode}
+	<div id="leftSidebar">
+		{$leftSidebarCode}
+	</div>
+{/if}
+</div>
+
+{if $rightSidebarCode}
 	<div id="sidebar">
-		{if $leftSidebarCode}
-			<div id="leftSidebar">
-				{$leftSidebarCode}
-			</div>
-		{/if}
-		{if $rightSidebarCode}
-			<div id="rightSidebar">
-				{$rightSidebarCode}
-			</div>
-		{/if}
+		<div id="rightSidebar">
+			{$rightSidebarCode}
+		</div>
 	</div>
 {/if}
 
 <div id="main">
-
-{include file="common/navbar.tpl"}
 
 <div id="breadcrumb">
 	<a href="{url page="index"}" target="_parent">{translate key="navigation.home"}</a> &gt;

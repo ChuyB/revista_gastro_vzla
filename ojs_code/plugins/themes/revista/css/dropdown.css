@@ -1,0 +1,167 @@
+/**
+ * plugins/themes/revista/css/dropdown.css
+ *
+ * The #sidebarUser and #sidebarNavigation blocks sit in the navbar strip as
+ * dropdown triggers. Their .blockTitle becomes a <button class="blockToggle">
+ * (see js/navbar.js and the block templates); everything inside the block
+ * except the title is the panel.
+ *
+ * The trigger is a real <button> so keyboard activation, focus and
+ * aria-expanded all work without extra handling. js/navbar.js adds click and
+ * Escape handling; :focus-within covers keyboard users even with JS disabled.
+ */
+
+#navbarBar .block {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+}
+
+/* --- Trigger -------------------------------------------------------------- */
+
+#navbarBar .block .blockTitle {
+	margin: 0;
+	font-size: inherit;
+}
+
+#navbarBar .blockToggle {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--gen-space-2);
+	padding: var(--gen-space-2) var(--gen-space-3);
+	border: 0;
+	border-radius: var(--gen-radius-sm);
+	background: transparent;
+	color: var(--gen-ink);
+	font-family: inherit;
+	font-size: var(--gen-size-sm);
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	line-height: var(--gen-leading-tight);
+	text-transform: uppercase;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+#navbarBar .blockToggle:hover {
+	background: var(--gen-primary-light);
+	color: var(--gen-primary-dark);
+}
+
+/* Chevron, drawn rather than shipped as an image */
+#navbarBar .blockToggle::after {
+	content: "";
+	display: inline-block;
+	width: 0;
+	height: 0;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	border-top: 5px solid currentColor;
+	opacity: 0.6;
+}
+
+#navbarBar .blockToggle[aria-expanded="true"] {
+	background: var(--gen-primary);
+	color: #fff;
+}
+
+#navbarBar .blockToggle[aria-expanded="true"]::after {
+	transform: rotate(180deg);
+}
+
+/* --- Panel ----------------------------------------------------------------
+ *
+ * The panel is the single <div class="blockPanel"> the block templates wrap
+ * their contents in. Giving it one positioning context is what keeps its
+ * children in normal flow — absolutely positioning every non-title child
+ * instead would stack them all on the same top-left offset.
+ *
+ * Default (below 801px) the panel is a plain inline accordion that expands in
+ * place, so the same markup serves mobile without any positioning.
+ * ------------------------------------------------------------------------ */
+
+#navbarBar .blockPanel {
+	display: none;
+}
+
+#navbarBar .block.is-open .blockPanel {
+	display: block;
+	margin: 0;
+	padding: var(--gen-space-3) 0;
+	font-size: var(--gen-size-sm);
+	color: var(--gen-ink);
+	white-space: normal;
+}
+
+/* Keyboard fallback when js/navbar.js is unavailable */
+#navbarBar .block:focus-within .blockPanel {
+	display: block;
+}
+
+/*
+ * From 801px up the block is a flex item in the navbar strip, so the panel is
+ * absolutely positioned beneath it and can be taller than the strip.
+ */
+@media (min-width: 801px) {
+	#navbarBar .block.is-open .blockPanel {
+		position: absolute;
+		top: 100%;
+		right: 0;
+		z-index: 200;
+		width: max-content;
+		min-width: 17rem;
+		max-width: min(24rem, calc(100vw - 2rem));
+		padding: var(--gen-space-4);
+		border: 1px solid var(--gen-line);
+		border-top: 0;
+		border-radius: 0 0 var(--gen-radius) var(--gen-radius);
+		background: var(--gen-surface);
+		box-shadow: var(--gen-shadow-lg);
+	}
+}
+
+/* --- Panel contents ------------------------------------------------------- */
+
+#navbarBar .block.is-open .blockPanel {
+	background: var(--gen-surface);
+}
+
+#navbarBar .block .blockSubtitle {
+	margin-top: var(--gen-space-4);
+}
+
+#navbarBar .block form {
+	margin: 0;
+}
+
+#navbarBar .block table {
+	width: 100%;
+}
+
+#navbarBar .block table td {
+	display: block;
+	padding: 0 0 var(--gen-space-2);
+	border: 0;
+}
+
+#navbarBar .block input[type="checkbox"] {
+	width: auto;
+	margin-right: var(--gen-space-1);
+	vertical-align: middle;
+}
+
+#navbarBar .block input.button {
+	width: 100%;
+	text-align: center;
+}
+
+#navbarBar .block hr {
+	border: 0;
+	border-top: 1px solid var(--gen-line-soft);
+}

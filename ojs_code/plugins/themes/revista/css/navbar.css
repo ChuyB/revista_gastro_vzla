@@ -1,0 +1,77 @@
+/**
+ * plugins/themes/revista/css/navbar.css
+ *
+ * Full-width navbar strip. Sits in grid row 1 of #body, directly beneath the
+ * hero image in #header, and shares a flex row with the two dropdown blocks
+ * that the common and article header templates now render inside #navbarBar.
+ */
+
+#navbarBar > #navbar {
+	flex: 1 1 auto;
+	min-width: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	text-align: left;
+}
+
+/* #leftSidebar holds #sidebarUser and #sidebarNavigation, which become the
+ * search and user dropdown triggers. Push them to the trailing edge. */
+#navbarBar > #leftSidebar {
+	display: flex;
+	flex: 0 0 auto;
+	align-items: stretch;
+	gap: var(--gen-space-1);
+	margin-left: auto;
+}
+
+/* --- Menu ---------------------------------------------------------------- */
+
+#navbar ul.menu,
+#navbarBar #navbar ul {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--gen-space-1);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#navbar ul.menu > li {
+	display: block;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#navbar ul.menu > li > a {
+	display: block;
+	padding: var(--gen-space-3) var(--gen-space-3);
+	border-bottom: 2px solid transparent;
+	color: var(--gen-ink);
+	font-size: var(--gen-size-sm);
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+#navbar ul.menu > li > a:hover,
+#navbar ul.menu > li > a:focus {
+	border-bottom-color: var(--gen-primary);
+	color: var(--gen-primary);
+	text-decoration: none;
+}
+
+/* OJS has no active-page class on #navbar; #breadcrumb a.current is the only
+ * signal available, so style the bar subtly rather than faking an active item */
+#navbar ul.menu > li > a[aria-current] {
+	border-bottom-color: var(--gen-primary);
+	color: var(--gen-primary);
+}
+
+/* Hide the duplicate "Search" entry — the navbar has a dedicated search
+ * dropdown (templates/../blocks/navigation) rendering beside this menu.
+ * Remove this rule if you would rather keep both. */
+#navbar ul.menu > li#search {
+	display: none;
+}

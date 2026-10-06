@@ -17,7 +17,7 @@
 
 
 <div class="block" id="sidebarRTRelatedItems">
-	<span class="blockTitle">{translate key="plugins.block.relatedItems.title"}</span>
+	<h2 class="blockTitle">{translate key="plugins.block.relatedItems.title"}</h2>
 		<table width="100%">
 			<tr>
 				<td valign="top" style="width:26px;">

@@ -1,0 +1,67 @@
+/**
+ * plugins/themes/revista/css/tokens.css
+ *
+ * Design tokens. Every other partial reads from here, so a palette or spacing
+ * change is a single-file edit.
+ */
+
+:root {
+	/* Brand — clinical teal, reads as medical/scientific without being cold */
+	--gen-primary: #0f6f7e;
+	--gen-primary-dark: #0a525e;
+	--gen-primary-light: #e6f4f6;
+	--gen-accent: #c8102e;
+
+	/* Neutrals */
+	--gen-ink: #1c2128;
+	--gen-ink-soft: #4a5560;
+	--gen-ink-faint: #78838f;
+	--gen-line: #dde3e8;
+	--gen-line-soft: #eef1f4;
+	--gen-surface: #ffffff;
+	--gen-surface-alt: #f6f8fa;
+	--gen-canvas: #eef2f4;
+
+	/* Typography */
+	--gen-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+		"Helvetica Neue", Arial, "Noto Sans", sans-serif;
+	--gen-font-heading: var(--gen-font);
+	--gen-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+	--gen-size-xs: 0.75rem;
+	--gen-size-sm: 0.8125rem;
+	--gen-size-base: 0.9375rem;
+	--gen-size-md: 1.0625rem;
+	--gen-size-lg: 1.375rem;
+	--gen-size-xl: 1.875rem;
+	--gen-size-2xl: 2.375rem;
+
+	--gen-leading: 1.6;
+	--gen-leading-tight: 1.25;
+
+	/* Spacing scale */
+	--gen-space-1: 0.25rem;
+	--gen-space-2: 0.5rem;
+	--gen-space-3: 0.75rem;
+	--gen-space-4: 1rem;
+	--gen-space-5: 1.5rem;
+	--gen-space-6: 2rem;
+	--gen-space-7: 3rem;
+
+	/* Shape */
+	--gen-radius-sm: 3px;
+	--gen-radius: 6px;
+	--gen-radius-lg: 10px;
+	--gen-shadow-sm: 0 1px 2px rgba(28, 33, 40, 0.06);
+	--gen-shadow: 0 2px 8px rgba(28, 33, 40, 0.08);
+	--gen-shadow-lg: 0 12px 32px rgba(28, 33, 40, 0.14);
+
+	/* Layout */
+	--gen-max-width: 78rem;
+	--gen-gutter: var(--gen-space-5);
+	--gen-sidebar-width: 19rem;
+	--gen-navbar-height: 3.5rem;
+
+	/* Breakpoint mirror for styles/mobile.css:16 — keep the two in sync */
+	--gen-mobile-max: 800px;
+}

@@ -10,7 +10,7 @@
  *}
 {if !empty($forReaders) || !empty($forAuthors) || !empty($forLibrarians)}
 <div class="block" id="sidebarInformation">
-	<span class="blockTitle">{translate key="plugins.block.information.link"}</span>
+	<h2 class="blockTitle">{translate key="plugins.block.information.link"}</h2>
 	<ul>
 		{if !empty($forReaders)}<li><a href="{url page="information" op="readers"}">{translate key="navigation.infoForReaders"}</a></li>{/if}
 		{if !empty($forAuthors)}<li><a href="{url page="information" op="authors"}">{translate key="navigation.infoForAuthors"}</a></li>{/if}
