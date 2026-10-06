@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<style>
+        /* Estilo para el botón pequeño */
+        #toggleButton {
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        // Función para ocultar o mostrar el párrafo
+        function toggleParagraph() {
+            var para = document.getElementById("miParrafo");
+            if (para.style.display === "none") {
+                para.style.display = "block";
+            } else {
+                para.style.display = "none";
+            }
+        }
+    </script>
+	
+	
+</head>
+<body>
+
+<!-- Botón para ocultar o mostrar el párrafo -->
+<button id="toggleButton" onclick="toggleParagraph()">Afiliación de Autores</button>
+
+    <p id="miParrafo" style="display: block;"><font font-family: 'Arial'; font-size: 14.4px;> 
+		
+		<i>María Fátima Garcés</i><br>
+		Licenciada en Bioanálisis. Dra. en ciencias mención bioquímica. Profesor Titular Cátedra de Bioquímica “A” Escuela de Bioanálisis. Coordinador Laboratorio de Investigaciones Básicas y Aplicadas. Facultad de Medicina, Universidad Central de Venezuela, Caracas.<br><br>
+		
+		<i>Jefferson Guzmán</i><br>
+		Estudiante Escuela de Bioanálisis. Laboratorio de Investigaciones Básicas y Aplicadas. Facultad de Medicina, Universidad Central de Venezuela, Caracas.<br><br>
+		
+		<i>Xiomara Moreno</i><br>
+		Instituto Médico La Floresta. Departamento de Microbiología. Caracas. Venezuela. Profesor Instructor Cátedra de Bacteriología Escuela de Bioanálisis. Laboratorio de Investigaciones Básicas y Aplicadas. Facultad de Medicina, Universidad Central de Venezuela, Caracas.<br><br>
+		
+		<i>Ana Cecilia Márquez</i><br>
+		Médico Psiquiatra. Coordinador de la Unidad de Autismo Maternidad Concepción Palacios, Anexo “Negra Matea” Caracas-Venezuela.<br><br>
+		
+		<i>Karolina López</i><br>
+		Médico Pediatra, Gastroenterólogo Unidad de Gastroenterología y Nutrición Pediátrica Hospital General “Dr. Miguel Pérez Carreño”, IVSS. Caracas- Venezuela.<br><br>
+		
+		<i>Yacelli Bustamante</i><br>
+		Licenciada en Bioanálisis. Profesor Asociado Cátedra de Matemática y Estadística. Escuela de Bioanálisis. Facultad de Medicina, Universidad Central de Venezuela, Caracas.<br><br>
+		
+
+	</p>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<style>
+        /* Estilo para el botón pequeño */
+        #toggleButton {
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+	<style>
+        .justify {
+            text-align: justify;
+        }
+    </style>
+    <script>
+        // Función para ocultar o mostrar el párrafo
+        function toggleParagraph() {
+            var para = document.getElementById("miParrafo");
+            if (para.style.display === "none") {
+                para.style.display = "block";
+            } else {
+                para.style.display = "none";
+            }
+        }
+    </script>
+	
+	
+</head>
+<body>
+
+<!-- Botón para ocultar o mostrar el párrafo -->
+<button id="toggleButton" onclick="toggleParagraph()">Afiliación de Autores</button>
+
+    <p id="miParrafo" style="display: block;"><font font-family: 'Arial'; font-size: 8px; style="text-align: justify;"> 
+		
+		<i>Juneidy Aguilera Correo</i><br>
+		Servicio de Bacteriología Clínica, Hospital Vargas. Caracas-Venezuela<br><br>
+		
+		<i>Diana Ortiz-Princz Correo</i><br>
+		Doctora en Ciencias de la Salud. Coordinadora Laboratorio de Microbiología Molecular. Servicio Autónomo Instituto de Biomedicina “Dr. Jacinto Convit”, y Cátedra de Inmunología. Escuela José María Vargas. Facultad de Medicina. Universidad Central de Venezuela. Caracas-Venezuela.<br><br>
+
+		<i>Guillermo Veitia Correo</i><br>
+		Gastroenterólogo. Hospital Dr. José María Vargas. Caracas, Venezuela<br><br>
+
+		<i>Juan Carlos Otero Correo</i><br>
+		Servicio de Gastroenterología, Hospital Vargas. Caracas-Venezuela<br><br>
+
+		<i>María Eugenia Cavazza Correo</i><br>
+		Cátedra de Bioquímica. Escuela José María Vargas. Facultad de Medicina. Universidad Central de Venezuela. Caracas-Venezuela<br>
+	</p>
+</body>
+</html>

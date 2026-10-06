@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<style>
+        /* Estilo para el botón pequeño */
+        #toggleButton {
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        // Función para ocultar o mostrar el párrafo
+        function toggleParagraph() {
+            var para = document.getElementById("miParrafo");
+            if (para.style.display === "none") {
+                para.style.display = "block";
+            } else {
+                para.style.display = "none";
+            }
+        }
+    </script>
+	
+	
+</head>
+<body>
+
+<!-- Botón para ocultar o mostrar el párrafo -->
+<button id="toggleButton" onclick="toggleParagraph()">Afiliación de Autores</button>
+
+    <p id="miParrafo" style="display: block;"><font font-family: 'Arial'; font-size: 14.4px;> 
+		
+		<i>Anais Karina Garcia Yaraure.</i><br>
+		Residente de segundo año de postgrado de Gastroenterología de CMDLT.<br><br>
+		
+		<i>Lucy Dagher.</i><br>
+		Hepatólogo adjunto al servicio de Gastroenterología del CMDLT.<br><br>
+		
+
+		<i>Freddy Pereira Graterol.</i><br>
+		Cirujano endoscopista, Unidad de Cirugía de Mínimo Acceso. Day Hospital.<br><br>
+
+		<i>Dervis José Bandres Bustamante.</i><br>
+		Ecoendoscopista y jefe del servicio de Gastroenterología del CMDLT.<br><br>
+		
+	</p>
+</body>
+</html>

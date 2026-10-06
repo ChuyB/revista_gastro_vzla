@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<style>
+        /* Estilo para el botón pequeño */
+        #toggleButton {
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        // Función para ocultar o mostrar el párrafo
+        function toggleParagraph() {
+            var para = document.getElementById("miParrafo");
+            if (para.style.display === "none") {
+                para.style.display = "block";
+            } else {
+                para.style.display = "none";
+            }
+        }
+    </script>
+	
+	
+</head>
+<body>
+
+<!-- Botón para ocultar o mostrar el párrafo -->
+<button id="toggleButton" onclick="toggleParagraph()">Afiliación de Autores</button>
+
+    <p id="miParrafo" style="display: block;"><font font-family: 'Arial'; font-size: 14.4px;> 
+		
+		<i>Andreina Frágenas</i><br>
+		Médico Internista – Gastroenterólogo. Residente 2do año de Hepatología CMDLT. Clínica de Prevención del Cáncer. Sociedad Anticancerosa de Venezuela.<br><br>
+		
+		<i>Estyvales Curbata</i><br>
+		Médico Internista – Gastroenterólogo. Clínica de Prevención del Cáncer. Sociedad Anticancerosa de Venezuela.<br><br>
+		
+		<i>Oriana Álvarez</i><br>
+		Medico Gastroenterólogo. Clínica de Prevención del Cáncer. Sociedad Anticancerosa de Venezuela.<br><br>
+		
+		<i>Guillermo Pérez</i><br>
+		Médico Internista – Gastroenterólogo. Clínica de Prevención del Cáncer. Sociedad Anticancerosa de Venezuela.<br><br>
+		
+		<i>Sylvia Benítez</i><br>
+		Medico Gastroenterólogo. Clínica de Prevención del Cáncer. Sociedad Anticancerosa de Venezuela.<br><br>
+		
+		<i>Luis Pérez-Ybarra</i><br>
+		Universidad de Carabobo. Facultad de Ciencias de la Salud. Escuela de Bioanalisis sede Aragua.<br><br>
+		
+		<i>Cono Gumina</i><br>
+		Medico Gastroenterólogo. UNIVIDI Clínica Santa Sofía. Presidente Sociedad Anticancerosa de Venezuela.<br><br>
+		
+
+	</p>
+</body>
+</html>

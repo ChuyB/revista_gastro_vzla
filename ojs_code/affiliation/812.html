@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<style>
+        /* Estilo para el botón pequeño */
+        #toggleButton {
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        // Función para ocultar o mostrar el párrafo
+        function toggleParagraph() {
+            var para = document.getElementById("miParrafo");
+            if (para.style.display === "none") {
+                para.style.display = "block";
+            } else {
+                para.style.display = "none";
+            }
+        }
+    </script>
+	
+	
+</head>
+<body>
+
+<!-- Botón para ocultar o mostrar el párrafo -->
+<button id="toggleButton" onclick="toggleParagraph()">Afiliación de Autores</button>
+
+    <p id="miParrafo" style="display: block;"><font font-family: 'Arial'; font-size: 14.4px;> 
+		
+		
+       	<i>César Alberto Louis-Chad</i><br>
+		Médico Cirujano. Residencia Asistencial Programada de Medicina Interna del Hospital de Clínicas Caracas. Venezuela.<br><br>
+		
+        <i>Adrian Pardo Ochoa</i><br>
+		Médico Cirujano. Residencia Asistencial Programada de Medicina Interna del Hospital de Clínicas Caracas. Venezuela.<br><br>
+		
+        <i>César Louis-Pérez</i><br>
+		Profesor de medicina. Especialista en Neurogastroenterología. Facultad de Medicina. Universidad Central de Venezuela. Hospital Universitario de Caracas. Hospital de Clínicas Caracas. UMYN Caracas-Venezuela.<br><br>
+		
+        <i>Mariano Fernández Silano</i><br>
+		Profesor de medicina. Especialista en Salud Pública. Coordinador de Investigación de la Facultad de Medicina. Universidad Central de Venezuela. Coordinación de Docencia e Investigación en el Hospital de Clínicas Caracas.<br><br>
+		
+	</p>
+</body>
+</html>

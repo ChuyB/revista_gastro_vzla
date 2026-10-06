@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<style>
+        /* Estilo para el botón pequeño */
+        #toggleButton {
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        // Función para ocultar o mostrar el párrafo
+        function toggleParagraph() {
+            var para = document.getElementById("miParrafo");
+            if (para.style.display === "none") {
+                para.style.display = "block";
+            } else {
+                para.style.display = "none";
+            }
+        }
+    </script>
+	
+	
+</head>
+<body>
+
+<!-- Botón para ocultar o mostrar el párrafo -->
+<button id="toggleButton" onclick="toggleParagraph()">Afiliación de Autores</button>
+
+    <p id="miParrafo" style="display: block;"><font font-family: 'Arial'; font-size: 14.4px;> 
+		
+		<i>Alfredo Alejandro Monsalve Turbay</i><br>
+		Médico Internista, Residente de Postgrado de Gastroenterología, Instituto Autónomo Hospital Universitario de los Andes.<br><br>
+		
+		<i>Fernando Torres</i><br>
+		Residente de Tercer año de postgrado de Cirugía General, Instituto Autónomo Hospital Universitario de los Andes.<br><br>
+		
+        <i>Luis Acevedo</i><br>
+		Residente de Tercer año de postgrado de Radiología y Diagnóstico por Imagenes, Instituto Autónomo Hospital Universitario de los Andes.<br><br>
+		
+		<i>Estrella Celeste Uzcátegui Paz</i><br>
+		Cirujano Hepatobiliar Coordinadora de postgrado de Cirugía General, Instituto Autónomo Hospital Universitario de los Andes.<br><br>
+		
+	</p>
+</body>
+</html>

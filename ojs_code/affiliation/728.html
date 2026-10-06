@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<style>
+        /* Estilo para el botón pequeño */
+        #toggleButton {
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        // Función para ocultar o mostrar el párrafo
+        function toggleParagraph() {
+            var para = document.getElementById("miParrafo");
+            if (para.style.display === "none") {
+                para.style.display = "block";
+            } else {
+                para.style.display = "none";
+            }
+        }
+    </script>
+	
+	
+</head>
+<body>
+
+<!-- Botón para ocultar o mostrar el párrafo -->
+<button id="toggleButton" onclick="toggleParagraph()">Afiliación de Autores</button>
+
+    <p id="miParrafo" style="display: block;"><font font-family: 'Arial'; font-size: 14.4px;> 
+		
+		<i>Katherine Ainslie</i><br>
+		Residente de Gastroenterología y Nutrición Pediátrica. Pediatra Puericultor. Hospital Militar Universitario “Dr. Carlos Arvelo”, Caracas-Venezuela.<br><br>
+		
+		<i>Eleana Gómez</i><br>
+		Residente de Gastroenterología y Nutrición Pediátrica. Pediatra Puericultor. Hospital Militar Universitario “Dr. Carlos Arvelo”, Caracas-Venezuela.<br><br>
+		
+		<i>Carlos Silva</i><br>
+		Residente de Gastroenterología y Nutrición Pediátrica. Pediatra Puericultor. Hospital Militar Universitario “Dr. Carlos Arvelo”, Caracas-Venezuela.<br><br>
+		
+		<i>Karolin Blanco</i><br>
+		Residente de Gastroenterología y Nutrición Pediátrica. Pediatra Puericultor. Hospital Militar Universitario “Dr. Carlos Arvelo”, Caracas-Venezuela.<br><br>
+		
+		<i>Nina Colina</i><br>
+		Gastroenterólogo – Hepatólogo. Pediatra Puericultor. Hospital Militar Universitario “Dr. Carlos Arvelo”, Caracas-Venezuela.<br><br>
+		
+		<i>Nazareth Mosquera</i><br>
+		Gastroenterólogo. Pediatra Puericultor. Hospital Militar Universitario “Dr. Carlos Arvelo”, Caracas-Venezuela.<br><br>
+		
+
+	</p>
+</body>
+</html>

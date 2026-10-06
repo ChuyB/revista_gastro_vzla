@@ -1,0 +1,362 @@
+/* Design Refactor for Revista GEN (OJS 2.x) - MOBILE MENU FIXES */
+
+.menu-toggle-checkbox {
+  display: none !important;
+}
+
+/* --- DESKTOP DEFAULTS --- */
+@media only screen and (min-width: 801px) {
+  .hamburger-btn,
+  .sponsors-footer-section {
+    display: none !important;
+  }
+}
+
+/* --- MOBILE STYLES --- */
+@media only screen and (max-width: 800px) {
+  * {
+    box-sizing: border-box !important;
+  }
+  html,
+  body {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  #container {
+    display: flex;
+    flex-direction: column;
+    width: 100% !important;
+    min-width: 100% !important;
+    margin: 0 !important;
+  }
+  #body {
+    display: flex;
+    flex-direction: column;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+  #main {
+    order: 1;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  #navbar ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+  }
+
+  #navbar ul li {
+    width: 33.33%;
+    text-align: center;
+    padding: 10px 2px;
+    font-size: 12px;
+  }
+
+  #currentIssueTop {
+    order: -1;
+    margin: 10px;
+    padding: 15px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    text-align: center;
+  }
+
+  #issueCoverImage img {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    margin: 15px auto !important;
+    border-radius: 8px;
+  }
+
+  #content {
+    display: flex;
+    flex-direction: column;
+    padding: 15px !important;
+  }
+
+  /* HAMBURGER MENU OVERLAY */
+  #sidebar {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: #fff !important;
+    z-index: 1500 !important;
+    padding: 80px 25px 40px 25px !important;
+    overflow-y: auto !important;
+  }
+
+  #leftSidebar,
+  #rightSidebar {
+    width: 100% !important;
+    float: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  #menuToggle:checked ~ #container #body #sidebar {
+    display: block !important;
+  }
+
+  /* MENU ITEM STYLING - FORCING RESPONSIVENESS */
+  #sidebar .block {
+    display: none;
+    margin-bottom: 35px !important;
+    width: 100% !important;
+    border: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  /* SHOW ONLY REQUESTED BLOCKS */
+  #sidebar #sidebarUser,
+  #sidebar #sidebarNavigation,
+  #sidebar #sidebarInformation,
+  #sidebar #customblock-PUBLICIDAD-left,
+  #sidebar #publicidad-left {
+    display: block !important;
+  }
+
+  /* Aggressively fix tables/divs inside blocks */
+  #sidebar .block * {
+    max-width: 100% !important;
+    width: auto !important;
+    height: auto !important;
+    float: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    position: static !important;
+  }
+
+  /* Specific fix for divs with hardcoded large widths */
+  #sidebar .block div {
+    width: 100% !important;
+  }
+
+  #sidebar .block table {
+    width: 100% !important;
+    display: block !important;
+  }
+
+  #sidebar .block tbody,
+  #sidebar .blockTitle,
+  #sidebar .block td,
+  #sidebar .block tr {
+    width: 100% !important;
+    display: block !important;
+    box-sizing: border-box !important;
+    white-space: normal !important; /* This prevents the text from cutting off */
+    overflow: visible !important;
+  }
+
+  #sidebar .blockTitle {
+    font-size: 1.2em !important;
+    font-weight: bold !important;
+    color: #003366 !important;
+    margin-bottom: 15px !important;
+    padding-bottom: 5px !important;
+    border-bottom: 2px solid #003366 !important;
+    text-transform: uppercase !important;
+    display: block !important;
+    margin-top: 10px !important;
+    word-wrap: break-word !important;
+  }
+
+  #sidebar input[type="text"],
+  #sidebar input[type="password"],
+  #sidebar select {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 45px !important; /* Bigger tap targets for mobile */
+    margin: 8px 0 !important;
+    -webkit-appearance: none;
+  }
+
+  #sidebar .button {
+    width: 100% !important;
+    padding: 12px !important;
+    background: #003366 !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 4px !important;
+    margin-top: 10px !important;
+  }
+
+  #sidebar img {
+    max-width: 80% !important;
+    margin: 10px 0 !important;
+    display: block !important;
+  }
+
+  #sidebar ul {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  #sidebar li {
+    padding: 12px 0 !important;
+    border-bottom: 1px solid #eee !important;
+  }
+
+  #sidebar a {
+    text-decoration: none !important;
+    color: #003366 !important;
+    font-weight: 500 !important;
+    display: block !important;
+  }
+
+  /* Hamburger Button */
+  .hamburger-btn {
+    display: flex !important;
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 2000;
+    background: #0c78e5;
+    color: #fff;
+    padding: 10px !important;
+    border-radius: 50%;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .hamburger-btn .icon-return {
+    display: none;
+  }
+
+  #menuToggle:checked + .hamburger-btn {
+    background: #df7171;
+  }
+
+  #menuToggle:checked + .hamburger-btn .icon-plus {
+    display: none;
+  }
+
+  #menuToggle:checked + .hamburger-btn .icon-return {
+    display: block;
+  }
+
+  /* SPONSORS SECTION */
+  .sponsors-footer-section {
+    display: block !important;
+    padding: 40px 20px !important;
+    background: #fff;
+    border-top: 1px solid #f0f0f0;
+    width: 100% !important;
+    order: 5;
+  }
+
+  .sponsors-title {
+    color: #bbb;
+    letter-spacing: 4px;
+    font-size: 0.65rem;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .sponsors-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    align-items: center;
+    justify-items: center;
+  }
+
+  .sponsor-item img {
+    max-width: 100% !important;
+    max-height: 50px;
+    object-fit: contain;
+  }
+
+  .sponsor-item.full-width {
+    grid-column: span 3;
+    width: 60%;
+    margin: 0 auto;
+  }
+
+  /* FOOTER */
+  #footer,
+  #pageFooter {
+    order: 10;
+    width: 100% !important;
+    padding: 30px 15px !important;
+    background: #fafafa !important;
+    text-align: center;
+    color: #888;
+    font-size: 0.75em;
+  }
+
+  /* Academic logos table fixes - Only targeting the table that is the only one in its center to avoid affecting videos */
+  #pageFooter center table:only-of-type {
+    width: 100% !important;
+    display: block !important;
+    margin: 20px auto !important;
+  }
+
+  #pageFooter center table:only-of-type tbody,
+  #pageFooter center table:only-of-type tr,
+  #pageFooter center table:only-of-type td {
+    display: block !important;
+    width: 100% !important;
+    padding: 10px 0 !important;
+  }
+
+  #pageFooter center table:only-of-type td img {
+    max-width: 100% !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    display: block !important;
+  }
+
+  #headerTitle {
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  #headerTitle h1 {
+    width: 100% !important;
+    font-size: 1.15em !important;
+    padding: 12px 15px !important;
+    text-align: center !important;
+    margin: 0 !important;
+    display: block !important;
+  }
+
+  #headerTitle img {
+    max-width: 100% !important;
+    display: inline-block !important;
+    margin: 0 auto !important;
+  }
+
+  #main h2 {
+    text-align: center !important;
+    width: 100% !important;
+    margin: 20px 0 !important;
+  }
+
+  /* Hide redundant elements */
+  #breadcrumbs,
+  #chatbase-message-container,
+  #publicidad {
+    display: none !important;
+  }
+}
