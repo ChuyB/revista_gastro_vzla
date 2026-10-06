@@ -60,12 +60,14 @@
 }
 
 /*
- * Subordinate titles. plugins/blocks/user/block.tpl uses h3.blockTitle for the
- * implicit-auth section labels so the heading order under the h2 stays valid.
- * The h2/h3 rules above set margin/size in em on the element, so reset them
- * here rather than relying on a descendant selector.
+ * Subordinate titles inside the user block (its implicit-auth section labels).
+ *
+ * Scoped to #sidebarUser deliberately: the h2/h3 rules above set margin and
+ * size in em on the element itself, so an unscoped `.block h3.blockTitle` would
+ * also shrink the Custom Block Manager ad blocks, whose section headings are
+ * h3.blockTitle and are top-level within their block, not subordinate.
  */
-.block h3.blockTitle {
+#sidebarUser h3.blockTitle {
 	margin: var(--gen-space-4) 0 var(--gen-space-2);
 	font-size: var(--gen-size-xs);
 }
