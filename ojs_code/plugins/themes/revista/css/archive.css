@@ -1,0 +1,166 @@
+/**
+ * plugins/themes/revista/css/archive.css
+ *
+ * Issue archive: one CSS Grid of cards per year.
+ *
+ * Markup produced by templates/issue/archive.tpl:
+ *
+ *   #issues
+ *     .issueYear
+ *       h3.issueYearTitle
+ *       .issueGrid
+ *         .issueCard#issue-<id>
+ *           a.issueCardCover > img
+ *           .issueCardBody
+ *             h4.issueCardTitle > a
+ *             .issueCoverDescription | .issueDescription
+ *
+ * The old markup leaned on styles/common.css `.issueCoverImage img { float:left;
+ * width:100px }`, which is what put the cover and the title side by side. That
+ * class is gone, so nothing floats here.
+ */
+
+/* --- Year group ----------------------------------------------------------- */
+
+#issues {
+	margin: 0;
+}
+
+.issueYear {
+	margin: 0 0 var(--gen-space-6);
+}
+
+.issueYearTitle {
+	margin: 0 0 var(--gen-space-4);
+	padding: 0 0 var(--gen-space-2);
+	border: 0;
+	border-bottom: 2px solid var(--gen-primary);
+	background: transparent;
+	color: var(--gen-ink);
+	font-size: var(--gen-size-lg);
+	font-weight: 700;
+	letter-spacing: 0.01em;
+	text-transform: none;
+}
+
+/* --- Grid ----------------------------------------------------------------- */
+
+/*
+ * auto-fill + minmax means the column count follows the width of #main
+ * (~4 columns at 864px, 1 at 390px) with no media queries to maintain.
+ */
+.issueGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+	gap: var(--gen-space-4);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* --- Card ----------------------------------------------------------------- */
+
+.issueCard {
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+	overflow: hidden;
+	border: 1px solid var(--gen-line);
+	border-radius: var(--gen-radius);
+	background: var(--gen-surface);
+	transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.issueCard:hover,
+.issueCard:focus-within {
+	border-color: var(--gen-primary);
+	box-shadow: var(--gen-shadow);
+	transform: translateY(-2px);
+}
+
+.issueCardCover {
+	display: block;
+	background: var(--gen-surface-alt);
+	border-bottom: 1px solid var(--gen-line);
+}
+
+/*
+ * Covers in this archive are portrait, almost all ~0.773 (811x1047,
+ * 768x993, 2533x3272), with two outliers at 0.836. A 3/4 ratio keeps every card
+ * the same height; `contain` rather than `cover` so the outlier covers are
+ * letterboxed instead of having artwork cropped.
+ */
+.issueCardCover img {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 3 / 4;
+	object-fit: contain;
+	border: 0;
+}
+
+.issueCardBody {
+	flex: 1 1 auto;
+	padding: var(--gen-space-3);
+	text-align: center;
+}
+
+.issueCardTitle {
+	margin: 0 0 var(--gen-space-1);
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: var(--gen-ink);
+	font-size: var(--gen-size-sm);
+	font-weight: 600;
+	line-height: 1.35;
+	letter-spacing: 0;
+	text-transform: none;
+}
+
+.issueCardTitle a {
+	color: var(--gen-ink);
+}
+
+.issueCard:hover .issueCardTitle a,
+.issueCardTitle a:hover {
+	color: var(--gen-primary);
+	text-decoration: none;
+}
+
+.issueCoverDescription,
+.issueDescription {
+	margin: 0;
+	color: var(--gen-ink-faint);
+	font-size: var(--gen-size-xs);
+	line-height: 1.5;
+}
+
+.issueCoverDescription:empty,
+.issueDescription:empty {
+	display: none;
+}
+
+/* Issue with no cover page: the body carries the whole card */
+.issueCardNoCover .issueCardBody {
+	padding: var(--gen-space-4) var(--gen-space-3);
+}
+
+.issueCardNoCover .issueCardTitle {
+	font-size: var(--gen-size-md);
+}
+
+/* --- Pagination ----------------------------------------------------------- */
+
+/* Moved out of #issues so that element holds issue data only */
+#issuesPagination {
+	margin: var(--gen-space-5) 0 0;
+	text-align: center;
+	font-size: var(--gen-size-base);
+	color: var(--gen-ink-faint);
+}
+
+.issuesEmpty {
+	margin: 0;
+	color: var(--gen-ink-soft);
+}

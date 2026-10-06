@@ -10,7 +10,7 @@
  * BEFORE styles/mobile.css, which stays authoritative below 801px.
  *
  * Load order within this file matters: tokens -> base -> layout -> navbar ->
- * blocks -> dropdown -> publicidad.
+ * blocks -> dropdown -> publicidad -> archive.
  */
 
 @import url("css/tokens.css");
@@ -20,3 +20,4 @@
 @import url("css/blocks.css");
 @import url("css/dropdown.css");
 @import url("css/publicidad.css");
+@import url("css/archive.css");
