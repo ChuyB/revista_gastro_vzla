@@ -18,12 +18,18 @@
 }
 
 /* #leftSidebar holds #sidebarUser and #sidebarNavigation, which become the
- * search and user dropdown triggers. Push them to the trailing edge. */
+ * search and user dropdown triggers. Push them to the trailing edge.
+ *
+ * min-height matters: #navbarBar's own min-height sizes the single-row state,
+ * but once a panel is docked the bar wraps to two rows and each row falls back
+ * to its natural content height. Without this the trigger row jumps ~4px when
+ * the panel docks. */
 #navbarBar > #leftSidebar {
 	display: flex;
 	flex: 0 0 auto;
 	align-items: stretch;
 	gap: var(--gen-space-1);
+	min-height: var(--gen-navbar-height);
 	margin-left: auto;
 }
 
@@ -77,4 +83,10 @@
  * Remove this rule if you would rather keep both. */
 #navbar ul.menu > li#search {
 	display: none;
+}
+
+@media only screen and (max-width: 1060px) {
+  #navbarBar {
+    flex-direction: column;
+  }
 }

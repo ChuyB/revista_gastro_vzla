@@ -63,6 +63,11 @@
 	--gen-sidebar-width: 19rem;
 	--gen-navbar-height: 3.5rem;
 
+	/* Navbar dropdown panel: hover panels are a narrow popover, docked panels
+	 * become a full-width row, so both cap out here. */
+	--gen-panel-max-width: 44rem;
+	--gen-panel-control-width: 20rem;
+
 	/* Breakpoint mirror for styles/mobile.css:16 — keep the two in sync */
 	--gen-mobile-max: 800px;
 }

@@ -90,7 +90,14 @@
 	display: none;
 }
 
-#navbarBar .block.is-open .blockPanel {
+/*
+ * .is-open is hover, .is-docked is click — see js/navbar.js. Both classes are
+ * set on the panel as well as its block, because a docked panel is moved out of
+ * .block and into #navbarBar, so `.block.is-docked .blockPanel` would no longer
+ * match it. They differ only in how the panel is positioned from 801px up.
+ */
+#navbarBar .blockPanel.is-open,
+#navbarBar .blockPanel.is-docked {
 	display: block;
 	margin: 0;
 	padding: var(--gen-space-3) 0;
@@ -99,17 +106,21 @@
 	white-space: normal;
 }
 
-/* Keyboard fallback when js/navbar.js is unavailable */
-#navbarBar .block:focus-within .blockPanel {
-	display: block;
-}
+/*
+ * NB: there is deliberately no `:focus-within { display: block }` rule here.
+ * It looks like a sensible keyboard fallback, but it fights js/navbar.js: Escape
+ * returns focus to the trigger, which would immediately re-reveal the panel it
+ * had just dismissed. Every dismissal path (click, Escape, outside click,
+ * focusout) is handled in the script instead.
+ */
 
 /*
- * From 801px up the block is a flex item in the navbar strip, so the panel is
- * absolutely positioned beneath it and can be taller than the strip.
+ * From 801px up the block is a flex item in the navbar strip, so a *hover*
+ * opened panel is absolutely positioned beneath it and can be taller than the
+ * strip without pushing the page around.
  */
 @media (min-width: 801px) {
-	#navbarBar .block.is-open .blockPanel {
+	#navbarBar .blockPanel.is-open {
 		position: absolute;
 		top: 100%;
 		right: 0;
@@ -124,44 +135,163 @@
 		background: var(--gen-surface);
 		box-shadow: var(--gen-shadow-lg);
 	}
+
+	/*
+	 * DOCKED — a *click* opened panel.
+	 *
+	 * Instead of overlaying the page it becomes a second row inside #navbarBar,
+	 * so the bar grows and the content below is pushed down.
+	 *
+	 * js/navbar.js moves the .blockPanel element itself out of its block and
+	 * into #navbarBar when docking, and puts it back when closing. That is why
+	 * there is no `display: contents` here: it would need to dissolve both
+	 * #leftSidebar and the .block to let the panel become a flex item, and a
+	 * box-less ancestor makes DevTools highlight the whole page for that
+	 * element and shifts the row metrics a few pixels.
+	 *
+	 * `order: 10` keeps the panel after both triggers, `flex: 1 0 100%` forces
+	 * it onto its own line, and the max-width keeps the row from becoming a
+	 * mostly-empty 1200px band.
+	 *
+	 * The bar-level class is set by js/navbar.js rather than using :has(), so
+	 * this keeps working in browsers without :has() support.
+	 */
+	#navbarBar.navbarBar--docked {
+		flex-wrap: wrap;
+	}
+
+	#navbarBar.navbarBar--docked > .blockPanel {
+		position: static;
+		order: 10;
+		flex: 1 0 100%;
+		width: auto;
+		min-width: 0;
+		max-width: var(--gen-panel-max-width);
+		margin: 0 auto 0 0;
+		padding: var(--gen-space-4) var(--gen-gutter);
+		border: 0;
+		border-top: 1px solid var(--gen-line);
+		border-radius: 0;
+		background: var(--gen-surface-alt);
+		box-shadow: none;
+	}
 }
 
 /* --- Panel contents ------------------------------------------------------- */
 
-#navbarBar .block.is-open .blockPanel {
+#navbarBar .blockPanel {
 	background: var(--gen-surface);
 }
 
-#navbarBar .block .blockSubtitle {
+#navbarBar .blockPanel .blockSubtitle {
 	margin-top: var(--gen-space-4);
 }
 
-#navbarBar .block form {
+#navbarBar .blockPanel form {
 	margin: 0;
 }
 
-#navbarBar .block table {
+#navbarBar .blockPanel table {
 	width: 100%;
 }
 
-#navbarBar .block table td {
+#navbarBar .blockPanel table td {
 	display: block;
 	padding: 0 0 var(--gen-space-2);
 	border: 0;
 }
 
-#navbarBar .block input[type="checkbox"] {
+#navbarBar .blockPanel input[type="checkbox"] {
 	width: auto;
 	margin-right: var(--gen-space-1);
 	vertical-align: middle;
 }
 
-#navbarBar .block input.button {
+/*
+ * A docked panel is a wide row, so the form controls would otherwise stretch to
+ * fill it and the submit button would span the whole bar. blocks.css sets
+ * `width: 100%` on these inputs; the selectors here are ID-scoped so they win.
+ */
+#navbarBar .blockPanel input[type="text"],
+#navbarBar .blockPanel input[type="password"],
+#navbarBar .blockPanel select {
 	width: 100%;
+}
+#navbarBar .blockPanel.is-docked input[type="text"],
+#navbarBar .blockPanel.is-docked input[type="password"],
+#navbarBar .blockPanel.is-docked select {
+	max-width: var(--gen-panel-control-width);
+}
+
+#navbarBar .blockPanel input.button {
+	display: inline-block;
+	width: auto;
+	min-width: 8rem;
 	text-align: center;
 }
 
-#navbarBar .block hr {
+#navbarBar .blockPanel hr {
 	border: 0;
 	border-top: 1px solid var(--gen-line-soft);
+}
+
+/*
+ * A docked panel is reparented out of its .block, so every rule in blocks.css
+ * that was scoped to `.block <x>` stops matching the panel's own content while
+ * it is docked. These are the equivalents that keep the login and search forms
+ * looking the same in both states.
+ */
+#navbarBar .blockPanel ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#navbarBar .blockPanel li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#navbarBar .blockPanel li a {
+	display: block;
+	padding: var(--gen-space-1) 0;
+	color: var(--gen-ink);
+  text-decoration: underline;
+}
+
+#navbarBar .blockPanel li a:hover {
+	color: var(--gen-primary);
+}
+
+#navbarBar .blockPanel p {
+	margin: 0 0 var(--gen-space-2);
+}
+
+#navbarBar .blockPanel label {
+	display: block;
+	margin: 0 0 var(--gen-space-1);
+	color: var(--gen-ink-soft);
+	font-size: var(--gen-size-xs);
+	font-weight: 600;
+}
+
+#navbarBar .blockPanel .blockSubtitle {
+	display: block;
+	margin: var(--gen-space-4) 0 var(--gen-space-2);
+	color: var(--gen-ink-soft);
+	font-size: var(--gen-size-xs);
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+#navbarBar .blockPanel img {
+	max-width: 100%;
+	height: auto;
+}
+
+#navbarBar table#simpleSearchInput input,
+#navbarBar table#simpleSearchInput select {
+  margin-top: var(--gen-space-2);
 }
