@@ -58,13 +58,21 @@
    * in normal flow below 801px, so tapping .blockToggle expands it in place and
    * the .is-open class set by plugins/themes/revista/js/navbar.js does the rest.
    *
-   * #menuToggle must remain the element immediately preceding #container for
-   * `#menuToggle:checked ~ #container #body #navbarBar` to match.
+   * #menuToggle must remain the element immediately preceding .hamburger-btn for
+   * `#menuToggle:checked + .hamburger-btn` (open state) and
+   * `#menuToggle:checked ~ #navbarBar` (the overlay) to match.
    */
   #navbarBar > #navbar {
+    /* #navbar carries `flex: 1 1 auto` from plugins/themes/revista/css/
+     * navbar.css, where the bar is a ROW and growing it is what pushes the
+     * dropdown triggers to the trailing edge. Here the overlay is a COLUMN, so
+     * growing it vertically made the wrapped menu rows spread ~220px apart.
+     * Content-sized instead. */
+    flex: 0 0 auto;
     width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
+    justify-content: center;
   }
 
   #navbarBar > #leftSidebar {
@@ -181,6 +189,14 @@
     font-size: 12px;
   }
 
+  #navbar ul.menu {
+    flex-direction: column;
+  }
+
+  #navbar ul.menu li {
+    width: 100%;
+  }
+
   #currentIssueTop {
     order: -1;
     margin: 10px;
@@ -205,13 +221,16 @@
     padding: 15px !important;
   }
 
-  /* HAMBURGER MENU OVERLAY — moved from #sidebar to #navbarBar.
+  /* MOBILE MENU OVERLAY
    *
-   * templates/common/header.tpl and templates/article/header.tpl now render the
-   * left sidebar blocks (user, navigation) inside #navbarBar, so #sidebar holds
-   * only the right sidebar blocks. Leaving the overlay on #sidebar would give
-   * the hamburger a near-empty panel and hide #customblock-PUBLICIDAD, which
-   * needs to render as a full-width strip under #main, not inside a menu.
+   * The left sidebar blocks (user, navigation) are rendered inside #navbarBar,
+   * so #sidebar holds only the right sidebar blocks; the overlay belongs here or
+   * the menu panel would be near-empty and #customblock-PUBLICIDAD — which needs
+   * to render as a full-width strip under #main — would end up inside a menu.
+   *
+   * #menuToggle is now the first child of #body (next to the menu bar) rather
+   * than a sibling of #container, so this selector is a plain sibling
+   * combinator instead of `~ #container #body`.
    */
   #navbarBar {
     display: none;
@@ -223,13 +242,14 @@
     height: 100vh !important;
     background: #fff !important;
     z-index: 1500 !important;
-    padding: 80px 25px 40px 25px !important;
+    /* Clears the menu bar, which sits on top at z-index 2000 */
+    padding: 62px 25px 40px 25px !important;
     overflow-y: auto !important;
     flex-direction: column;
     align-items: stretch;
   }
 
-  #menuToggle:checked ~ #container #body #navbarBar {
+  #menuToggle:checked ~ #navbarBar {
     display: flex !important;
   }
 
@@ -382,38 +402,64 @@
     display: block !important;
   }
 
-  /* Hamburger Button */
+  /* MOBILE MENU BAR
+   *
+   * Was a fixed circular button floating over the hero's top-right corner. It is
+   * now the first child of #body (see templates/common/header.tpl) and styles
+   * as a full-width bar with a centred "Menu" label — the row the navbar would
+   * occupy. `#navbarBar` becomes a fixed overlay below, so nothing is lost.
+   *
+   * `position: relative` (not static) so z-index lifts it above that overlay,
+   * which keeps the bar tappable to dismiss the menu it opened.
+   */
   .hamburger-btn {
     display: flex !important;
-    position: fixed;
-    top: 15px;
-    right: 15px;
+    position: relative;
     z-index: 2000;
-    background: #0c78e5;
-    color: #fff;
-    padding: 10px !important;
-    border-radius: 50%;
+    order: 0;
+    width: auto !important;
+    margin: 0 calc(-1 * var(--gen-gutter)) var(--gen-gutter) !important;
+    padding: 14px var(--gen-gutter) !important;
+    border: 0;
+    border-bottom: 1px solid #dde3e8;
+    border-radius: 0;
+    background: #f6f8fa;
+    color: #1c2128;
+    box-shadow: none;
     cursor: pointer;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .hamburger-btn .icon-return {
-    display: none;
-  }
-
-  #menuToggle:checked + .hamburger-btn {
-    background: #df7171;
-  }
-
-  #menuToggle:checked + .hamburger-btn .icon-plus {
-    display: none;
-  }
-
-  #menuToggle:checked + .hamburger-btn .icon-return {
+  /* The label is the only child, so centring it centres the whole bar */
+  .hamburger-btn .hamburger-label {
     display: block;
+    pointer-events: none;
+  }
+
+  /* Open state: the overlay covers the whole viewport, so the bar pins to the
+   top of it and doubles as the menu's dismiss control. Left in flow it would
+   float over the middle of the menu, halfway down the page. */
+  #menuToggle:checked + .hamburger-btn {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    /* Cancel the full-bleed negative margins; with left/right: 0 they would
+       push the bar to x: -24px and make it 48px too wide. */
+    margin: 0 !important;
+    width: auto !important;
+    z-index: 2000;
+    background: #235794;
+    color: #fff;
   }
 
   /* SPONSORS SECTION
@@ -504,7 +550,7 @@
     font-size: 1.15em !important;
     /* Horizontal padding removed so the banner reaches the card edge here,
      * matching the full-bleed #header in the revista theme (layout.css). */
-    padding: 0 0 12px 0 !important;
+    padding: 0;
     text-align: center !important;
     margin: 0 !important;
     display: block !important;

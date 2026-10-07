@@ -77,12 +77,6 @@
 </head>
 <body id="pkp-{$pageTitle|replace:'.':'-'}">
 
-<input type="checkbox" id="menuToggle" class="menu-toggle-checkbox">
-<label for="menuToggle" class="hamburger-btn">
-    <svg class="icon-plus" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-    <svg class="icon-return" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-</label>
-
 <div id="container">
 
 <div id="header">
@@ -107,6 +101,23 @@
 </div>
 
 <div id="body">
+
+{**
+  * Mobile menu bar.
+  *
+  * Sits as the first child of #body — the row the navbar would occupy — and
+  * styles as a full-width bar with a centred "Menu" label instead of the
+  * floating circle it used to be.
+  *
+  * The label must stay the immediate next sibling of #menuToggle: styles/
+  * mobile.css uses `#menuToggle:checked + .hamburger-btn` for the open state.
+  * #menuToggle itself is display:none and is toggled by the label's `for`.
+  *
+  * @see styles/mobile.css — .hamburger-btn and the #navbarBar overlay
+  * @see templates/article/header.tpl for the mirrored version of this markup
+  *}
+<input type="checkbox" id="menuToggle" class="menu-toggle-checkbox">
+<label for="menuToggle" class="hamburger-btn"><span class="hamburger-label">Menu</span></label>
 
 {**
   * Navbar strip: full-width navigation row beneath the hero.
