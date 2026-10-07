@@ -575,3 +575,59 @@
     display: none !important;
   }
 }
+
+/* --------------------------------------------------------------------------
+ * Auth forms on narrow screens
+ *
+ * OJS lays these out as <table class="data"> whose inputs carry a size
+ * attribute (size="20" on the register form, up to size="40" for ORCID). A
+ * `size` attribute counts towards the table's min-content width, which worked
+ * out at 487px for the register form: wider than a 390px viewport, so the table
+ * overflowed sideways. Because the rules above pin overflow-x: hidden on
+ * html/body, that overflow was not reachable — the user could not scroll to
+ * the right-hand edge to read the fields.
+ *
+ * Stacking the label above its value and letting the controls fill the column
+ * removes the min-content contribution, so the table can shrink to the
+ * viewport. Deliberately scoped to the auth forms: table.data is the markup for
+ * roughly 125 editorial templates too, which this does not need to touch.
+ * -------------------------------------------------------------------------- */
+@media only screen and (max-width: 520px) {
+  #registerForm table.data,
+  #profile table.data {
+    width: 100%;
+  }
+  #registerForm table.data tr,
+  #profile table.data tr {
+    display: block;
+  }
+  #registerForm table.data td,
+  #profile table.data td {
+    display: block;
+    width: auto !important;
+    max-width: 100%;
+  }
+  #registerForm table.data td.label,
+  #profile table.data td.label {
+    padding: var(--gen-space-4) 0 var(--gen-space-1);
+  }
+  #registerForm table.data input.textField,
+  #registerForm table.data select,
+  #registerForm table.data textarea,
+  #profile table.data input.textField,
+  #profile table.data select,
+  #profile table.data textarea {
+    width: 100% !important;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  #registerForm table.data td.instruct,
+  #profile table.data td.instruct {
+    padding: 0 0 var(--gen-space-2);
+  }
+  /* The Captcha is a fixed 300x100 PNG and must not widen the row */
+  #registerForm table.data img {
+    max-width: 100%;
+    height: auto;
+  }
+}

@@ -135,8 +135,43 @@
 }
 
 /*
- * The chatbot was removed from these blocks, but the chatbase floating launcher
- * is still injected by embed.min.js in the stored content. To remove the
- * launcher as well, delete the embeddedChatbotConfig and embed.min.js script
- * tags at the end of the block content in the Custom Block Manager.
+ * Chatbot — rendered two ways depending on viewport:
+ *
+ *   Desktop (min-width: 801px): the chatbase iframe is part of the PUBLICIDAD
+ *   block, which is ordered first in the right sidebar.
+ *   Mobile (max-width: 800px): the whole PUBLICIDAD block is hidden by
+ *   mobile.css (its sponsor logos are served from .sponsors-footer-section
+ *   instead), so the embedded chatbase launcher is the only way in.
+ *
+ * Because embed.min.js injects that fixed launcher unconditionally, it has to be
+ * suppressed on desktop — otherwise it floats on top of the sidebar widget that
+ * already offers the same chat.
  */
+@media (min-width: 801px) {
+	#chatbase-bubble-button,
+	#chatbase-message-bubble {
+		display: none !important;
+	}
+}
+
+/* Inline chat frame: fills the 19rem sidebar, no inline sizing of its own. */
+#customblock-PUBLICIDAD .chatPanel {
+	border: 1px solid var(--gen-line);
+	border-radius: var(--gen-radius);
+	background: #fff;
+	overflow: hidden;
+}
+
+#customblock-PUBLICIDAD .chatPanel iframe {
+	display: block;
+	width: 100%;
+	height: 26rem;
+	border: 0;
+}
+
+/* Divider between the chatbot section and the sponsor list below it. */
+#customblock-PUBLICIDAD .blockRule {
+	margin: var(--gen-space-4) 0;
+	border: 0;
+	border-top: 1px solid var(--gen-line);
+}

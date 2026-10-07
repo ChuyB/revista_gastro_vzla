@@ -199,6 +199,24 @@
 }
 
 /* --------------------------------------------------------------------------
+ * Issue view — current issue cover
+ *
+ * templates/issue/view.tpl emits width="600" height="700" on the cover <img>.
+ * Those presentational attributes lose to this rule, so the cover is no longer
+ * pinned at 600px: with the sidebar present the main column narrows below that
+ * around tablet widths and the image used to run under the sidebar. It now
+ * fills its column and keeps its aspect ratio. mobile.css already did this
+ * below 801px; the same treatment is needed above it.
+ * ------------------------------------------------------------------------ */
+
+#issueCoverImage img {
+	width: 100%;
+  max-width: 600px;
+	height: auto;
+	display: block;
+}
+
+/* --------------------------------------------------------------------------
  * Sponsors footer
  *
  * There is no #footer / #footerContent element in any OJS template, so the
