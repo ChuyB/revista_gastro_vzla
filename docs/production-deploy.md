@@ -16,7 +16,7 @@ it is syntactically valid and a byte-level no-op when the state already matches.
 
 ## 1. What is being deployed
 
-38 files, in four groups.
+39 files, in five groups.
 
 ### 1.1 New theme plugin (14 files, all new)
 
@@ -100,7 +100,22 @@ Heavily rewritten: the floating circular hamburger became a full-width "Menu" ba
 pinned to the top when open, plus the responsive sidebar/block rules and the
 narrow-screen form rules.
 
-### 1.5 Deliberately NOT deployed
+### 1.5 Site hero image (1 new file)
+
+```
+ojs_code/public/site/pageHeaderTitleImage.png
+```
+
+A copy of the journal banner `public/site/images/root/banner2.PNG`. Referenced by
+the `site_settings.pageHeaderTitleImage` rows in §4 of `production-db.sql`, which
+is what gives pages with no journal context (`/index.php/index/user`) the journal
+hero instead of the bare site title. See §4.7 for why it is needed.
+
+It is a new binary in `public/site/`, which no tarball covers, so it is `scp`'d
+individually like `styles/mobile.css` (§6.1). All three locales point at this one
+file, so it must not be given a per-locale suffix.
+
+### 1.6 Deliberately NOT deployed
 
 | File | Why |
 | --- | --- |
@@ -320,6 +335,48 @@ empty block with no error. Set the form's language dropdown to `es_AR`.
 If the UI route is used, §6 still applies in full: saving Setup step 5 rewrites
 every setting on that form, so re-run the §4.5 verification query afterwards.
 
+### 4.7 Site-wide theme and hero — required
+
+Pages with **no journal context** are rendered through a different branch of
+`TemplateManager::assignDefaultArgs()`. The *Página personal* link in the navbar
+points at `/index.php/index/user` — journal path `index`, not `GEN` — so it never
+reaches the `if (isset($journal))` block that activates the theme. Everything
+under `/index.php/index/...` is affected, not just that one page:
+
+| Page | Symptom before the fix |
+| --- | --- |
+| `/index.php/index/user` | unstyled, plain core layout |
+| `/index.php/index/login` | unstyled, hero falls back to the site title "GEN" |
+
+The `else` branch reads `site_settings`, not `journal_settings`:
+
+- `siteTheme` was `classicBlue`, which ships no CSS, so the theme never applied.
+- `pageHeaderTitleImage` was unset, so `Site::getLocalizedPageHeaderTitle()`
+  returned the site `title` and the hero lost the journal banner.
+
+Section 5 of `production-db.sql` sets `siteTheme = 'revista'` and points
+`pageHeaderTitleType` / `pageHeaderTitleImage` at the banner for `en_US`, `es_AR`
+and `es_ES`. `siteTheme` is also settable in the admin UI under
+**Settings → Website → Admin**; the hero rows are what an upload there would
+produce.
+
+Two things to get right if you set these by hand:
+
+- `site_settings` is keyed `(setting_name, locale)` and the DAO already groups
+  rows by locale, so **each row holds the un-keyed value for that locale**. Wrapping
+  the serialized payload in a locale key produces
+  `array('es_AR' => array('es_AR' => ...))`, and the template then renders
+  `<img src="..." width="" height="" />` — an empty hero with no error anywhere.
+- `uploadName` is resolved against `getSiteFilesPath()`, which is
+  `public_files_dir . '/site'`. It must not contain a `/`: the template applies
+  `|escape:"url"`, which turns `images/banner2.PNG` into `images%2Fbanner2.PNG`
+  and yields a 404. Hence the dedicated copy at `public/site/pageHeaderTitleImage.png`
+  (§1.5) rather than reusing the journal's own path.
+
+Clearing the cache afterwards matters here too — `site_settings` is cached in
+`cache/fc-siteSettings-site.php`, which is one of the `fc-*` files in §5.
+
+
 ---
 
 ## 5. Clear the cache — do not skip
@@ -400,6 +457,7 @@ overwritten in place** — that doubles as the file-level rollback.
 | `templates.tar.gz` | `templates/` (339 real files) | `templates/` | `templates` |
 | `theme.tar.gz` | the new `revista/` theme (14 files) | `revista/` | `plugins/themes/revista` |
 | `styles/mobile.css` | **not packaged** — copied directly | — | `styles/mobile.css` |
+| `pageHeaderTitleImage.png` | **not packaged** — copied directly | — | `public/site/pageHeaderTitleImage.png` |
 
 **On the workstation**
 
@@ -411,6 +469,8 @@ ls -la updates/
 
 scp -r updates <user>@<host>:/tmp/
 scp    ojs_code/styles/mobile.css <user>@<host>:/tmp/mobile.css
+scp    ojs_code/public/site/pageHeaderTitleImage.png \
+          <user>@<host>:/tmp/pageHeaderTitleImage.png
 ```
 
 **On the production host**
@@ -448,12 +508,14 @@ mv /tmp/revista-stage/blocks    plugins/blocks
 mv /tmp/revista-stage/templates templates
 mv /tmp/revista-stage/revista   plugins/themes/revista
 
-# 4. styles/mobile.css is not in any package.
-install -m 644 /tmp/mobile.css styles/mobile.css
+# 4. Neither of these is inside any package.
+install -m 644 /tmp/mobile.css              styles/mobile.css
+install -m 644 /tmp/pageHeaderTitleImage.png public/site/pageHeaderTitleImage.png
 
 # 5. Match the ownership and modes recorded in step 0.
 #    <OWNER>:<GROUP> below is whatever step 0 printed.
-chown -R <OWNER>:<GROUP> plugins/blocks templates plugins/themes/revista styles/mobile.css
+chown -R <OWNER>:<GROUP> plugins/blocks templates plugins/themes/revista \
+    styles/mobile.css public/site/pageHeaderTitleImage.png
 find plugins/blocks templates plugins/themes/revista -type d -exec chmod 755 {} \;
 find plugins/blocks templates plugins/themes/revista -type f -exec chmod 644 {} \;
 
@@ -462,6 +524,7 @@ grep -c 'blockToggle' plugins/blocks/user/block.tpl          # expect >= 1
 grep -c 'hamburger-btn' templates/common/header.tpl           # expect >= 1
 grep -c 'issueCoverImage' plugins/themes/revista/css/layout.css  # expect >= 1
 grep -c 'max-width: 520px' styles/mobile.css                  # expect >= 1
+ls -l public/site/pageHeaderTitleImage.png                    # expect present
 ```
 
 `plugins/themes/classicBlue/` is not touched by any of this and stays in place as
@@ -477,7 +540,7 @@ mv templates.pre-revista      templates
 if [ -d plugins/themes/revista.pre-revista ]; then
     mv plugins/themes/revista.pre-revista plugins/themes/revista
 fi
-rm -rf /tmp/revista-stage /tmp/updates /tmp/mobile.css
+rm -rf /tmp/revista-stage /tmp/updates /tmp/mobile.css /tmp/pageHeaderTitleImage.png
 ```
 
 ### 6.2 Known gaps in the current packages
@@ -485,14 +548,20 @@ rm -rf /tmp/revista-stage /tmp/updates /tmp/mobile.css
 Worth fixing before shipping; none of them break the deploy, but two are noise
 and one is a missed file.
 
-**`styles/mobile.css` is not packaged.** It lives in a fourth directory,
-`styles/`, and none of the three tarballs contains it. The command above copies
-it directly, but it means the packages alone are not a complete deployment set.
-If these packages are the unit of transport, build a fourth one:
+**Two files are not packaged: `styles/mobile.css` and
+`public/site/pageHeaderTitleImage.png`.** They live in `styles/` and `public/`,
+and none of the three tarballs covers either, so both are `scp`'d individually by
+the commands above. This means the packages alone are not a complete deployment
+set. If they are the unit of transport, build extra ones:
 
 ```bash
 cd /Users/jesus/Code/revistag/ojs_code
 COPYFILE_DISABLE=1 tar czf ../updates/styles.tar.gz styles/mobile.css
+
+# Build from public/ so the root-level .DS_Store is not swept in.
+cd /Users/jesus/Code/revistag/ojs_code/public
+COPYFILE_DISABLE=1 tar --no-mac-metadata --exclude='._*' --exclude='.DS_Store' \
+    -czf ../../updates/site-hero.tar.gz site/pageHeaderTitleImage.png
 ```
 
 **macOS metadata files are in the packages.** Built on macOS without
@@ -551,7 +620,28 @@ block placement      navigationblockplugin ctx=1 seq=1 enabled=1
 block placement      informationblockplugin ctx=2 seq=1 enabled=1
 block placement      roleblockplugin       enabled=0
 block placement      developedbyblockplugin enabled=0
+site theme           revista
+site hero [en_US]    a:6:{... "uploadName";s:24:"pageHeaderTitleImage.png"; ... }
+site hero [es_AR]    (same)
+site hero [es_ES]    (same)
 ```
+
+**Pages with no journal context** — the case that regressed silently, and the one
+that is easy to miss because the page still *looks* like a page. Signed in, open
+the navbar's *Página personal* (`/index.php/index/user`) and also check
+`/index.php/index/login` while signed out:
+
+- Both are styled: full-width journal banner hero, themed navbar, two-column
+  body with the styled card blocks.
+- The hero is the **journal banner**, not a bare "GEN" heading and not an empty
+  grey band.
+- Neither page shows the floating chat bubble at desktop widths — the bubble is
+  suppressed above 801px (§1.1 `publicidad.css`), so if it is visible there,
+  `siteTheme` did not take effect.
+- `pageHeaderTitleImage` in the site settings resolves to a real file: a blank
+  hero with `<img ... width="" height="">` in the source means the setting is
+  double-keyed by locale, and a 404 on the image means the file is not in
+  `public/site/` (§4.7).
 
 **Layout, at 1280px.**
 

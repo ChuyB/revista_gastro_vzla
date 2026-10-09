@@ -13,7 +13,7 @@
 --
 -- Take a backup first:  mysqldump -u ojs_user -p ojsg plugin_settings journal_settings > pre-revista.sql
 --
--- NOT included on purpose: journalPageHeader, journalPageFooter, authorInformation,
+-- Not included on purpose: journalPageHeader, journalPageFooter, authorInformation,
 -- homeHeaderTitleType, pageHeaderTitleType, journalThumbnailAltText, displayCurrentIssue,
 -- itemsPerPage, numPageLinks. Those six were deleted by accident during development
 -- and restored; production should already hold its own correct values, so they are
@@ -120,13 +120,49 @@ VALUES ('customblockmanagerplugin', '', 1, 'blocks', 'a:2:{i:0;s:10:"PUBLICIDAD"
 ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value);
 
 -- ---------------------------------------------------------------------------
--- 5. Verification (read-only)
+-- ---------------------------------------------------------------------------
+-- 5. Site-wide theme and hero, for pages with no journal context
+-- ---------------------------------------------------------------------------
+--
+-- TemplateManager renders /index.php/index/... (the "Pagina personal" user page,
+-- /index.php/index/login) through its `else` branch, which reads these
+-- site_settings instead of the journal's. With siteTheme left at classicBlue
+-- those pages render unthemed; with no pageHeaderTitleImage the hero falls back
+-- to the site title ("GEN") instead of the journal banner.
+--
+-- siteTheme is also settable in the admin UI (Settings -> Website -> Admin).
+--
+-- PK site_settings is (setting_name, locale) and the DAO already groups rows by
+-- locale, so each row below holds the UN-KEYED value for that locale. Do not
+-- wrap the serialized payload in a locale key, or the setting resolves to
+-- array('es_AR' => array('es_AR' => ...)) and the template sees no uploadName.
+--
+-- uploadName is resolved against getSiteFilesPath() = public_files_dir . '/site',
+-- so this file must exist at public/site/pageHeaderTitleImage.png on the
+-- production host (deploy guide section 6.1).
+INSERT INTO site_settings (setting_name, locale, setting_value, setting_type) VALUES
+  ('siteTheme', '', 'revista', 'string'),
+  ('pageHeaderTitleType', 'en_US', 'i:1;', 'object'),
+  ('pageHeaderTitleType', 'es_AR', 'i:1;', 'object'),
+  ('pageHeaderTitleType', 'es_ES', 'i:1;', 'object'),
+  ('pageHeaderTitleImage', 'en_US', 'a:6:{s:16:"originalFilename";s:11:"banner2.PNG";s:5:"width";i:1140;s:6:"height";i:253;s:10:"uploadName";s:24:"pageHeaderTitleImage.png";s:12:"dateUploaded";s:19:"2026-10-09 17:02:13";s:7:"altText";s:11:"Revista GEN";}', 'object'),
+  ('pageHeaderTitleImage', 'es_AR', 'a:6:{s:16:"originalFilename";s:11:"banner2.PNG";s:5:"width";i:1140;s:6:"height";i:253;s:10:"uploadName";s:24:"pageHeaderTitleImage.png";s:12:"dateUploaded";s:19:"2026-10-09 17:02:13";s:7:"altText";s:11:"Revista GEN";}', 'object'),
+  ('pageHeaderTitleImage', 'es_ES', 'a:6:{s:16:"originalFilename";s:11:"banner2.PNG";s:5:"width";i:1140;s:6:"height";i:253;s:10:"uploadName";s:24:"pageHeaderTitleImage.png";s:12:"dateUploaded";s:19:"2026-10-09 17:02:13";s:7:"altText";s:11:"Revista GEN";}', 'object')
+ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value), setting_type=VALUES(setting_type);
+
+-- ---------------------------------------------------------------------------
+-- 6. Verification (read-only)
 -- ---------------------------------------------------------------------------
 SELECT 'theme' AS check_name, setting_value AS value FROM journal_settings
   WHERE journal_id=1 AND setting_name='journalTheme'
 UNION ALL
 SELECT CONCAT('custom blocks: ', setting_value), '' FROM plugin_settings
   WHERE plugin_name='customblockmanagerplugin' AND setting_name='blocks'
+UNION ALL
+SELECT 'site theme', setting_value FROM site_settings WHERE setting_name='siteTheme'
+UNION ALL
+SELECT CONCAT('site hero [', locale, ']'), setting_value FROM site_settings
+  WHERE setting_name='pageHeaderTitleImage'
 UNION ALL
 SELECT 'block placement', CONCAT(plugin_name,' ctx=',MAX(IF(setting_name='context',setting_value,'')),
        ' seq=',MAX(IF(setting_name='seq',setting_value,'')),
