@@ -258,6 +258,13 @@ div#content div#articleTitle h3 {
   line-height: var(--gen-leading-extra-tight);
 }
 
+div#articleHeaderInfo,
+div#articleHeaderInfo div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 div#articleHeaderInfo button {
   background: var(--gen-primary) !important;
 }
