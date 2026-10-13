@@ -1,0 +1,633 @@
+/* Design Refactor for Revista GEN (OJS 2.x) - MOBILE MENU FIXES */
+
+.menu-toggle-checkbox {
+  display: none !important;
+}
+
+/* --- DESKTOP DEFAULTS --- */
+@media only screen and (min-width: 801px) {
+  .hamburger-btn,
+  .sponsors-footer-section {
+    display: none !important;
+  }
+}
+
+/* --- MOBILE STYLES --- */
+@media only screen and (max-width: 800px) {
+  * {
+    box-sizing: border-box !important;
+  }
+  html,
+  body {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  #container {
+    display: flex;
+    flex-direction: column;
+    width: 100% !important;
+    min-width: 100% !important;
+    margin: 0 !important;
+  }
+  #body {
+    display: flex;
+    flex-direction: column;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+  #main {
+    order: 1;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* NAVBAR STRIP
+   *
+   * templates/common/header.tpl and templates/article/header.tpl render
+   * #navbarBar as the first child of #body, holding common/navbar.tpl plus the
+   * left sidebar blocks (#sidebarUser, #sidebarNavigation).
+   *
+   * The box itself is styled further down as the hamburger overlay; the rules
+   * here lay out its contents. The two dropdown blocks behave as accordions
+   * inside the panel: plugins/themes/revista/css/dropdown.css keeps .blockPanel
+   * in normal flow below 801px, so tapping .blockToggle expands it in place and
+   * the .is-open class set by plugins/themes/revista/js/navbar.js does the rest.
+   *
+   * #menuToggle must remain the element immediately preceding .hamburger-btn for
+   * `#menuToggle:checked + .hamburger-btn` (open state) and
+   * `#menuToggle:checked ~ #navbarBar` (the overlay) to match.
+   */
+  #navbarBar > #navbar {
+    /* #navbar carries `flex: 1 1 auto` from plugins/themes/revista/css/
+     * navbar.css, where the bar is a ROW and growing it is what pushes the
+     * dropdown triggers to the trailing edge. Here the overlay is a COLUMN, so
+     * growing it vertically made the wrapped menu rows spread ~220px apart.
+     * Content-sized instead. */
+    flex: 0 0 auto;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    justify-content: center;
+  }
+
+  #navbarBar > #leftSidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0;
+  }
+
+  #navbarBar .block {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    font-size: 0.85rem !important;
+  }
+
+  #navbarBar .blockToggle {
+    width: 100% !important;
+    padding: 12px 0 !important;
+    border-bottom: 1px solid #d5dde3 !important;
+    font-size: 0.95rem !important;
+    text-align: left;
+  }
+
+  /* Expanded panel contents get comfortable tap targets */
+  #navbarBar .block.is-open .blockPanel {
+    padding: 12px 0 4px !important;
+  }
+
+  #navbarBar .block input[type="text"],
+  #navbarBar .block input[type="password"],
+  #navbarBar .block select {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 45px !important; /* Bigger tap targets for mobile */
+    margin: 6px 0 !important;
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+    -webkit-appearance: none;
+  }
+
+  #navbarBar .block input.button {
+    width: 100% !important;
+    padding: 12px !important;
+    background: #003366 !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 4px !important;
+    margin: 10px 0 0 !important;
+  }
+
+  #navbarBar .block table {
+    width: 100% !important;
+    border-collapse: collapse;
+  }
+
+  #navbarBar .block table td {
+    display: block !important;
+    padding: 0 0 8px !important;
+    border: 0 !important;
+    text-align: left;
+  }
+
+  #navbarBar .block input[type="checkbox"] {
+    width: auto !important;
+    height: auto !important;
+    margin-right: 6px !important;
+    vertical-align: middle;
+  }
+
+  #navbarBar .block ul {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  #navbarBar .block li {
+    padding: 8px 0 !important;
+    border-bottom: 1px solid #eee !important;
+  }
+
+  #navbarBar .block li:last-child {
+    border-bottom: 0 !important;
+  }
+
+  #navbarBar .block a {
+    text-decoration: none !important;
+    color: #003366 !important;
+    font-weight: 500 !important;
+    display: block !important;
+  }
+
+  #navbarBar .block br + br {
+    display: none !important;
+  }
+
+  #navbar ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+  }
+
+  #navbar ul li {
+    width: 33.33%;
+    text-align: center;
+    padding: 10px 2px;
+    font-size: 12px;
+  }
+
+  #navbar ul.menu {
+    flex-direction: column;
+  }
+
+  #navbar ul.menu li {
+    width: 100%;
+  }
+
+  #currentIssueTop {
+    order: -1;
+    margin: 10px;
+    padding: 15px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    text-align: center;
+  }
+
+  #issueCoverImage img {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    margin: 15px auto !important;
+    border-radius: 8px;
+  }
+
+  #content {
+    display: flex;
+    flex-direction: column;
+    padding: 15px !important;
+  }
+
+  /* MOBILE MENU OVERLAY
+   *
+   * The left sidebar blocks (user, navigation) are rendered inside #navbarBar,
+   * so #sidebar holds only the right sidebar blocks; the overlay belongs here or
+   * the menu panel would be near-empty and #customblock-PUBLICIDAD — which needs
+   * to render as a full-width strip under #main — would end up inside a menu.
+   *
+   * #menuToggle is now the first child of #body (next to the menu bar) rather
+   * than a sibling of #container, so this selector is a plain sibling
+   * combinator instead of `~ #container #body`.
+   */
+  #navbarBar {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: #fff !important;
+    z-index: 1500 !important;
+    /* Clears the menu bar, which sits on top at z-index 2000 */
+    padding: 62px 25px 40px 25px !important;
+    overflow-y: auto !important;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #menuToggle:checked ~ #navbarBar {
+    display: flex !important;
+  }
+
+  /* Right sidebar blocks flow inline under #main instead of into the overlay */
+  #sidebar {
+    order: 2;
+    position: static;
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+    background: transparent !important;
+    padding: 0 15px !important;
+    overflow: visible !important;
+  }
+
+  #leftSidebar,
+  #rightSidebar {
+    width: 100% !important;
+    float: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  /* MENU ITEM STYLING - FORCING RESPONSIVENESS */
+  #sidebar .block {
+    display: block;
+    margin-bottom: 35px !important;
+    width: 100% !important;
+    border: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  /* AD BLOCK — hidden on mobile
+   *
+   * The .sponsors-footer-section further down this file already lists the
+   * sponsor logos on phones, so #customblock-PUBLICIDAD (PATROCINADORES)
+   * duplicates them and pushes the rest of the page down. Hidden below 801px
+   * only; it still renders in the right sidebar on desktop. #customblock-
+   * PUBLICIDAD-left (PODCAST GEN / CAPSULA ACADEMICA GEN) is unaffected. */
+  #customblock-PUBLICIDAD {
+    display: none !important;
+  }
+
+  /* Aggressively fix tables/divs inside blocks */
+  #sidebarInformation * {
+    max-width: 100% !important;
+    width: auto !important;
+    height: auto !important;
+    float: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    position: static !important;
+  }
+
+  /* Specific fix for divs with hardcoded large widths */
+  #sidebarInformation div {
+    width: 100% !important;
+  }
+
+  #sidebarInformation table {
+    width: 100% !important;
+    display: block !important;
+  }
+
+  #sidebarInformation tbody,
+  #sidebarInformation .blockTitle,
+  #sidebarInformation .block td,
+  #sidebarInformation .block tr {
+    width: 100% !important;
+    display: block !important;
+    box-sizing: border-box !important;
+    white-space: normal !important; /* This prevents the text from cutting off */
+    overflow: visible !important;
+  }
+
+  /* BLOCK TITLES
+   *
+   * Only #sidebarInformation used to have a mobile override, which made it navy
+   * with a 2px underline while every other block title kept the theme's
+   * uppercase / letter-spaced ink styling. One rule now covers all sidebar
+   * block titles, at a size matching the navbar dropdown triggers
+   * (#navbarBar .blockToggle, 0.95rem) so the two read as the same thing.
+   *
+   * Scoped to #sidebar so the dropdown triggers in #navbarBar — whose h2 only
+   * wraps a <button> and must keep its zero margin — are left alone.
+   */
+  #sidebar .block .blockTitle {
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    color: var(--gen-ink) !important;
+    line-height: 1.3 !important;
+    letter-spacing: 0.04em;
+    text-transform: uppercase !important;
+    display: block !important;
+    margin: 0 0 12px !important;
+    padding: 0 0 6px !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--gen-line) !important;
+    background: transparent !important;
+    word-wrap: break-word !important;
+  }
+
+  #sidebar .blockNote {
+    font-size: 0.8rem !important;
+  }
+
+  #sidebarInformation input[type="text"],
+  #sidebarInformation input[type="password"],
+  #sidebarInformation select {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 45px !important; /* Bigger tap targets for mobile */
+    margin: 8px 0 !important;
+    -webkit-appearance: none;
+  }
+
+  #sidebarInformation .button {
+    width: 100% !important;
+    padding: 12px !important;
+    background: #003366 !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 4px !important;
+    margin-top: 10px !important;
+  }
+
+  #sidebarInformation img {
+    max-width: 80% !important;
+    margin: 10px 0 !important;
+    display: block !important;
+  }
+
+  #sidebarInformation ul {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  #sidebarInformation li {
+    padding: 12px 0 !important;
+    border-bottom: 1px solid #eee !important;
+  }
+
+  #sidebarInformation a {
+    text-decoration: none !important;
+    color: #003366 !important;
+    font-weight: 500 !important;
+    display: block !important;
+  }
+
+  /* MOBILE MENU BAR
+   *
+   * Was a fixed circular button floating over the hero's top-right corner. It is
+   * now the first child of #body (see templates/common/header.tpl) and styles
+   * as a full-width bar with a centred "Menu" label — the row the navbar would
+   * occupy. `#navbarBar` becomes a fixed overlay below, so nothing is lost.
+   *
+   * `position: relative` (not static) so z-index lifts it above that overlay,
+   * which keeps the bar tappable to dismiss the menu it opened.
+   */
+  .hamburger-btn {
+    display: flex !important;
+    position: relative;
+    z-index: 2000;
+    order: 0;
+    width: auto !important;
+    margin: 0 calc(-1 * var(--gen-gutter)) var(--gen-gutter) !important;
+    padding: 14px var(--gen-gutter) !important;
+    border: 0;
+    border-bottom: 1px solid #dde3e8;
+    border-radius: 0;
+    background: #f6f8fa;
+    color: #1c2128;
+    box-shadow: none;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* The label is the only child, so centring it centres the whole bar */
+  .hamburger-btn .hamburger-label {
+    display: block;
+    pointer-events: none;
+  }
+
+  /* Open state: the overlay covers the whole viewport, so the bar pins to the
+   top of it and doubles as the menu's dismiss control. Left in flow it would
+   float over the middle of the menu, halfway down the page. */
+  #menuToggle:checked + .hamburger-btn {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    /* Cancel the full-bleed negative margins; with left/right: 0 they would
+       push the bar to x: -24px and make it 48px too wide. */
+    margin: 0 !important;
+    width: auto !important;
+    z-index: 2000;
+    background: #235794;
+    color: #fff;
+  }
+
+  /* SPONSORS SECTION
+   *
+   * Kept visible on mobile: this is where the sponsor logos belong at this
+   * breakpoint now that #customblock-PUBLICIDAD is hidden above. It renders
+   * inside #content from templates/common/footer.tpl, and `order: 5` places it
+   * after the article body. Above 801px the rule at the top of this file hides
+   * it, because the sidebar #customblock-PUBLICIDAD block covers it there. */
+  .sponsors-footer-section {
+    display: block !important;
+    padding: 40px 20px !important;
+    background: #fff;
+    border-top: 1px solid #f0f0f0;
+    width: 100% !important;
+    order: 5;
+  }
+
+  .sponsors-title {
+    color: #bbb;
+    letter-spacing: 4px;
+    font-size: 0.65rem;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .sponsors-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    align-items: center;
+    justify-items: center;
+  }
+
+  .sponsor-item img {
+    max-width: 100% !important;
+    max-height: 50px;
+    object-fit: contain;
+  }
+
+  .sponsor-item.full-width {
+    grid-column: span 3;
+    width: 60%;
+    margin: 0 auto;
+  }
+
+  /* FOOTER */
+  #footer,
+  #pageFooter {
+    order: 10;
+    width: 100% !important;
+    padding: 30px 15px !important;
+    background: #fafafa !important;
+    text-align: center;
+    color: #888;
+    font-size: 0.75em;
+  }
+
+  /* Academic logos table fixes - Only targeting the table that is the only one in its center to avoid affecting videos */
+  #pageFooter center table:only-of-type {
+    width: 100% !important;
+    display: block !important;
+    margin: 20px auto !important;
+  }
+
+  #pageFooter center table:only-of-type tbody,
+  #pageFooter center table:only-of-type tr,
+  #pageFooter center table:only-of-type td {
+    display: block !important;
+    width: 100% !important;
+    padding: 10px 0 !important;
+  }
+
+  #pageFooter center table:only-of-type td img {
+    max-width: 100% !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    display: block !important;
+  }
+
+  #headerTitle {
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  #headerTitle h1 {
+    width: 100% !important;
+    font-size: 1.15em !important;
+    /* Horizontal padding removed so the banner reaches the card edge here,
+     * matching the full-bleed #header in the revista theme (layout.css). */
+    padding: 0;
+    text-align: center !important;
+    margin: 0 !important;
+    display: block !important;
+  }
+
+  #headerTitle img {
+    max-width: 100% !important;
+    display: inline-block !important;
+    margin: 0 auto !important;
+  }
+
+  #main h2 {
+    text-align: center !important;
+    width: 100% !important;
+    margin: 20px 0 !important;
+  }
+
+  /* Hide redundant elements */
+  #breadcrumbs,
+  #chatbase-message-container,
+  #publicidad {
+    display: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * Auth forms on narrow screens
+ *
+ * OJS lays these out as <table class="data"> whose inputs carry a size
+ * attribute (size="20" on the register form, up to size="40" for ORCID). A
+ * `size` attribute counts towards the table's min-content width, which worked
+ * out at 487px for the register form: wider than a 390px viewport, so the table
+ * overflowed sideways. Because the rules above pin overflow-x: hidden on
+ * html/body, that overflow was not reachable — the user could not scroll to
+ * the right-hand edge to read the fields.
+ *
+ * Stacking the label above its value and letting the controls fill the column
+ * removes the min-content contribution, so the table can shrink to the
+ * viewport. Deliberately scoped to the auth forms: table.data is the markup for
+ * roughly 125 editorial templates too, which this does not need to touch.
+ * -------------------------------------------------------------------------- */
+@media only screen and (max-width: 520px) {
+  #registerForm table.data,
+  #profile table.data {
+    width: 100%;
+  }
+  #registerForm table.data tr,
+  #profile table.data tr {
+    display: block;
+  }
+  #registerForm table.data td,
+  #profile table.data td {
+    display: block;
+    width: auto !important;
+    max-width: 100%;
+  }
+  #registerForm table.data td.label,
+  #profile table.data td.label {
+    padding: var(--gen-space-4) 0 var(--gen-space-1);
+  }
+  #registerForm table.data input.textField,
+  #registerForm table.data select,
+  #registerForm table.data textarea,
+  #profile table.data input.textField,
+  #profile table.data select,
+  #profile table.data textarea {
+    width: 100% !important;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  #registerForm table.data td.instruct,
+  #profile table.data td.instruct {
+    padding: 0 0 var(--gen-space-2);
+  }
+  /* The Captcha is a fixed 300x100 PNG and must not widen the row */
+  #registerForm table.data img {
+    max-width: 100%;
+    height: auto;
+  }
+}
