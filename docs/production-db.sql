@@ -11,7 +11,23 @@
 --   plugin_settings   PK: (plugin_name, locale, journal_id, setting_name)
 --   journal_settings  PK: (journal_id, locale, setting_name)
 --
--- Take a backup first:  mysqldump -u ojs_user -p ojsg plugin_settings journal_settings > pre-revista.sql
+-- Take a backup first:
+--   mysqldump -u ojs_user -p ojsg plugin_settings journal_settings site_settings > pre-revista.sql
+--
+-- !! TWO THINGS THAT SILENTLY BREAK THIS DEPLOY !!
+--
+-- 1. mysql ABORTS at the first error unless you pass --force, so if any
+--    statement below fails, everything after it is skipped without a word.
+--    Always run the PRE-FLIGHT block above, and section 6 afterwards, to see
+--    what actually landed.
+--
+-- 2. YOU MUST CLEAR THE OJS FILE CACHE AFTERWARDS even when this script exits
+--    cleanly. Site and plugin settings are cached on disk in
+--      cache/fc-siteSettings-site.php
+--      cache/fc-pluginSettings-*.php
+--    `rm -rf cache/t_compile/*` does NOT remove those, so the site keeps
+--    rendering the OLD theme (classicBlue) with no error anywhere:
+--      find cache -maxdepth 1 -name 'fc-*' -delete
 --
 -- Not included on purpose: journalPageHeader, journalPageFooter, authorInformation,
 -- homeHeaderTitleType, pageHeaderTitleType, journalThumbnailAltText, displayCurrentIssue,
@@ -19,6 +35,26 @@
 -- and restored; production should already hold its own correct values, so they are
 -- left untouched here. See the "Do not" section of the deploy guide.
 -- ---------------------------------------------------------------------------
+
+-- ===========================================================================
+-- PRE-FLIGHT (read-only). Run this on its own FIRST and check the output
+-- before applying anything:
+--
+--   mysql -u ojs_user -p ojsg < docs/check-production.sql
+--
+-- It prints the schema name plus the current value of every setting this
+-- script writes. If the schema or journal id printed is not what you expected,
+-- stop -- you are on the wrong host.
+-- ===========================================================================
+SELECT DATABASE() AS schema_you_are_changing, @@hostname AS db_host;
+SELECT 'journal_settings.journalTheme' AS setting, IFNULL(setting_value,'(unset)') AS current_value
+  FROM journal_settings WHERE journal_id=1 AND setting_name='journalTheme'
+UNION ALL
+SELECT 'site_settings.siteTheme', IFNULL(setting_value,'(unset)')
+  FROM site_settings WHERE setting_name='siteTheme'
+UNION ALL
+SELECT CONCAT('site hero [',locale,']'), IFNULL(setting_value,'(unset)')
+  FROM site_settings WHERE setting_name='pageHeaderTitleImage';
 
 -- 1. Activate the revista theme
 INSERT INTO journal_settings (journal_id, locale, setting_name, setting_value, setting_type)

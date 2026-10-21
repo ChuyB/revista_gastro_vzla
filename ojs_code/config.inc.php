@@ -427,7 +427,12 @@ captcha_on_comments = on
 captcha_on_mailinglist = on
 
 ; Font location for font to use in Captcha images
-font_location = /var/www/revistag/public/freefont/FreeSerif.ttf
+; NOTE: this was /var/www/revistag/public/freefont/FreeSerif.ttf, i.e. the
+; Linode docroot. In Docker the docroot is /var/www/html, so imagefttext() could
+; not open the font and silently returned false -- CaptchaManager::generateImage()
+; then emitted only the background plus its 400 noise dots, with no glyphs. Must
+; be reverted to /var/www/revistag/... if this file is deployed on that host.
+font_location = /var/www/html/public/freefont/FreeSerif.ttf
 
 
 ; Whether to use reCaptcha instead of default Captcha

@@ -195,6 +195,11 @@ step 5 form (§6), and it pins the block content to the `es_AR` locale key
 explicitly rather than inheriting whatever language the admin account is browsing
 in (§4.6).
 
+`mysql` **aborts at the first error** unless you pass `--force`, so a failure
+anywhere in the script silently skips everything after it. Run the read-only
+`docs/check-production.sql` before and after: it prints the schema name, the
+journal id and every row this script writes, each marked PASS or FAIL.
+
 A UI-only route exists for three of the four changes — see §4.6.
 
 ### 4.1 Activate the theme — required
@@ -387,12 +392,31 @@ all: the page kept serving old markup, the old sidebar order, and did not render
 a newly added block. The database was provably correct, but
 `cache/fc-pluginSettings-*.php` was still being read.
 
-Clearing `cache/t_compile/` alone does **not** fix this.
+Clearing `cache/t_compile/` alone does **not** fix this. Site settings live in
+`cache/fc-siteSettings-site.php` and plugin settings in
+`cache/fc-pluginSettings-*.php`; neither is under `t_compile/`. If you run the
+SQL and only clear `t_compile`, the site keeps serving `classicBlue` on
+journal-less pages and reports no error of any kind — this is the single most
+likely reason a database change looks like it "did nothing".
 
 ```bash
 cd /var/www/revistag
 find cache -maxdepth 1 -name 'fc-*' -delete
 rm -rf cache/t_compile/* cache/_db/* cache/t_cache/* cache/t_config/*
+```
+
+Then confirm it took, without touching the database — view source on a
+journal-less page and look for:
+
+```html
+<link rel="stylesheet" href="http://<host>/plugins/themes/revista/revista.css" ...>
+```
+
+If the row in the database says `revista` but that `<link>` is absent, it is
+cache, not SQL. Run the read-only diagnostic to separate the two:
+
+```bash
+mysql -u ojs_user -p ojsg < docs/check-production.sql
 ```
 
 Then reload PHP so compiled templates and any opcode cache are dropped:
