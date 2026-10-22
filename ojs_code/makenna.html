@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="English with Makenna - supportive English lessons for conversation, pronunciation, listening, and natural expressions." />
+  <title>English with Makenna</title>
+  <style>
+    :root {
+      --bg: #fffaf8;
+      --surface: #ffffff;
+      --surface-soft: #fdf3ef;
+      --surface-accent: #f7ebe5;
+      --text: #4b3f3d;
+      --muted: #7a6864;
+      --heading: #372d2b;
+      --primary: #c98f8f;
+      --primary-dark: #af7474;
+      --line: #ead9d4;
+      --shadow: 0 18px 50px rgba(74, 55, 49, 0.08);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --max: 1180px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(246, 230, 225, 0.55), transparent 30%),
+        radial-gradient(circle at top right, rgba(251, 238, 232, 0.8), transparent 32%),
+        var(--bg);
+      line-height: 1.6;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(calc(100% - 2rem), var(--max)); margin: 0 auto; }
+    .section { padding: 88px 0; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px;
+      border: 1px solid rgba(201, 143, 143, 0.25); border-radius: 999px;
+      background: rgba(255,255,255,0.72); color: var(--primary-dark);
+      font-size: 0.9rem; font-weight: 600; letter-spacing: 0.01em;
+    }
+    h1, h2, h3, h4 { margin: 0 0 16px; color: var(--heading); line-height: 1.15; font-family: Georgia, "Times New Roman", serif; }
+    h1 { font-size: clamp(2.8rem, 5vw, 4.9rem); }
+    h2 { font-size: clamp(2rem, 3.5vw, 3.2rem); }
+    h3 { font-size: 1.3rem; }
+    p { margin: 0 0 16px; }
+    .lead { font-size: 1.08rem; color: var(--muted); max-width: 62ch; }
+    .btns { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 28px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 24px;
+      border-radius: 999px; border: 1px solid transparent; font-weight: 600;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease; cursor: pointer;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: var(--primary); color: white; box-shadow: 0 14px 28px rgba(201, 143, 143, 0.26); }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary { background: rgba(255,255,255,0.8); border-color: var(--line); color: var(--heading); }
+    .topbar { position: sticky; top: 0; z-index: 40; backdrop-filter: blur(14px); background: rgba(255, 250, 248, 0.82); border-bottom: 1px solid rgba(234, 217, 212, 0.7); }
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 78px; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; color: var(--heading); }
+    .brand-mark { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; background: linear-gradient(135deg, #f2c8c8, #f9ece6); box-shadow: var(--shadow); font-family: Georgia, serif; font-size: 1.2rem; }
+    .nav-links { display: flex; align-items: center; gap: 22px; color: var(--muted); font-size: 0.96rem; }
+    .nav-links a:hover { color: var(--heading); }
+    .menu-toggle { display: none; background: transparent; border: 0; font-size: 1.5rem; color: var(--heading); }
+    .hero { padding: 44px 0 72px; }
+    .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 38px; align-items: center; }
+    .hero-card { background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.82)); border: 1px solid rgba(234, 217, 212, 0.85); border-radius: var(--radius-xl); padding: 28px; box-shadow: var(--shadow); }
+    .hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 26px; }
+    .stat { padding: 18px; border-radius: 18px; background: var(--surface-soft); border: 1px solid rgba(201, 143, 143, 0.12); }
+    .stat strong { display: block; font-size: 1.2rem; color: var(--heading); margin-bottom: 4px; }
+    .photo-panel { position: relative; min-height: 560px; border-radius: 36px; overflow: hidden; box-shadow: var(--shadow); background: linear-gradient(180deg, rgba(57,45,43,0.14), rgba(57,45,43,0.04)), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80') center/cover; }
+    .floating-note, .floating-card { position: absolute; background: rgba(255,255,255,0.92); border: 1px solid rgba(255,255,255,0.55); box-shadow: var(--shadow); border-radius: 22px; backdrop-filter: blur(10px); }
+    .floating-note { top: 28px; left: 28px; padding: 18px 20px; max-width: 240px; }
+    .floating-card { right: 20px; bottom: 24px; padding: 18px; width: 260px; }
+    .section-head { display: flex; justify-content: space-between; gap: 24px; align-items: end; margin-bottom: 34px; }
+    .grid-2, .grid-3, .grid-4 { display: grid; gap: 22px; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .card { background: rgba(255,255,255,0.82); border: 1px solid rgba(234, 217, 212, 0.88); border-radius: var(--radius-lg); padding: 26px; box-shadow: var(--shadow); }
+    .card.soft { background: var(--surface-soft); }
+    .icon { width: 50px; height: 50px; border-radius: 16px; display: grid; place-items: center; background: linear-gradient(135deg, #f7dada, #fbf0eb); margin-bottom: 18px; font-size: 1.3rem; }
+    .bullets { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 12px; }
+    .bullets li { display: flex; gap: 10px; align-items: flex-start; color: var(--muted); }
+    .bullets li::before { content: "•"; color: var(--primary-dark); font-size: 1.4rem; line-height: 1; margin-top: -1px; }
+    .split-panel { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 26px; align-items: stretch; }
+    .portrait { border-radius: 30px; overflow: hidden; min-height: 100%; background: linear-gradient(180deg, rgba(55,45,43,0.08), rgba(55,45,43,0.12)), url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1200&q=80') center/cover; box-shadow: var(--shadow); }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .pill { padding: 10px 14px; border-radius: 999px; background: #fff; border: 1px solid var(--line); color: var(--muted); font-size: 0.94rem; }
+    .pricing { position: relative; overflow: hidden; }
+    .pricing::after { content: "Personalized"; position: absolute; right: -30px; top: 18px; transform: rotate(12deg); background: #fff; border: 1px solid var(--line); color: var(--primary-dark); padding: 6px 42px; font-size: 0.85rem; font-weight: 700; }
+    .resource-card, .blog-card { display: flex; flex-direction: column; height: 100%; }
+    .resource-meta, .blog-meta { margin-top: auto; padding-top: 16px; font-size: 0.92rem; color: var(--primary-dark); font-weight: 600; }
+    .newsletter { background: linear-gradient(135deg, #f7e5de, #fff7f3); border-radius: 34px; padding: 34px; border: 1px solid rgba(201, 143, 143, 0.18); box-shadow: var(--shadow); }
+    form { display: grid; gap: 16px; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    label { display: grid; gap: 8px; font-weight: 600; color: var(--heading); font-size: 0.96rem; }
+    input, select, textarea { width: 100%; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--line); background: rgba(255,255,255,0.92); color: var(--text); font: inherit; }
+    textarea { min-height: 150px; resize: vertical; }
+    input:focus, select:focus, textarea:focus { outline: 2px solid rgba(201, 143, 143, 0.18); border-color: var(--primary); }
+    .contact-grid { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 24px; }
+    .contact-list { display: grid; gap: 14px; margin-top: 24px; }
+    .contact-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px; background: rgba(255,255,255,0.78); border: 1px solid rgba(234, 217, 212, 0.85); border-radius: 18px; }
+    .footer { padding: 34px 0 60px; color: var(--muted); }
+    .footer-box { display: flex; justify-content: space-between; gap: 18px; align-items: center; border-top: 1px solid var(--line); padding-top: 24px; flex-wrap: wrap; }
+    .small { font-size: 0.92rem; color: var(--muted); }
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @media (max-width: 980px) {
+      .hero-grid, .split-panel, .contact-grid, .grid-4, .grid-3, .grid-2, .form-grid { grid-template-columns: 1fr; }
+      .nav-links { position: absolute; left: 1rem; right: 1rem; top: calc(100% + 10px); padding: 18px; background: rgba(255,255,255,0.96); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); display: none; flex-direction: column; align-items: flex-start; }
+      .nav-links.open { display: flex; }
+      .menu-toggle { display: inline-flex; }
+      .hero-stats { grid-template-columns: 1fr; }
+      .photo-panel { min-height: 460px; }
+      .section { padding: 72px 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="#home" aria-label="English with Makenna home">
+        <span class="brand-mark">M</span>
+        <span>English with Makenna</span>
+      </a>
+      <button class="menu-toggle" aria-label="Toggle menu" id="menuToggle">☰</button>
+      <nav class="nav-links" id="navLinks">
+        <a href="#about">About</a>
+        <a href="#lessons">Lessons</a>
+        <a href="#resources">Resources</a>
+        <a href="#blog">Blog</a>
+        <a href="#contact">Contact</a>
+        <a href="#booking" class="btn btn-primary" style="min-height: 46px; padding: 0 18px;">Book a Lesson</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div class="hero-card reveal">
+          <span class="eyebrow">Supportive • Relaxed • Practical English</span>
+          <h1>Speak more naturally and confidently in English.</h1>
+          <p class="lead">Hi! I'm Makenna. I help English learners improve speaking, listening, pronunciation, and everyday conversation in a warm and encouraging environment.</p>
+          <div class="btns">
+            <a href="#booking" class="btn btn-primary">Book a Lesson</a>
+            <a href="#resources" class="btn btn-secondary">Explore Free Resources</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat"><strong>Conversation</strong><span>Natural speaking practice for daily life and real situations.</span></div>
+            <div class="stat"><strong>Pronunciation</strong><span>Clearer, smoother English with focused guidance and feedback.</span></div>
+            <div class="stat"><strong>Confidence</strong><span>Supportive lessons that help you sound more fluent and relaxed.</span></div>
+          </div>
+        </div>
+        <div class="photo-panel reveal" aria-label="Lifestyle learning image">
+          <div class="floating-note"><strong style="display:block; color:var(--heading); margin-bottom:8px;">For learners who want to sound natural</strong><span class="small">Especially helpful for Japanese learners and intermediate students improving real conversation.</span></div>
+          <div class="floating-card"><strong style="display:block; color:var(--heading); margin-bottom:6px;">What you'll practice</strong><div class="pill-row" style="margin-top: 8px;"><span class="pill">Listening</span><span class="pill">Pronunciation</span><span class="pill">Idioms</span><span class="pill">Travel English</span></div></div>
+        </div>
+      </div>
+    </section>
+    <section class="section" id="about">
+      <div class="container split-panel">
+        <div class="portrait reveal" aria-label="Teacher portrait placeholder"></div>
+        <div class="card reveal">
+          <span class="eyebrow">About Makenna</span>
+          <h2>A teacher who values real communication and cultural connection.</h2>
+          <p class="lead">This website is designed to feel personal, welcoming, and easy to navigate, with a friendly tone rather than a corporate one. It highlights Makenna's teaching background, experience in Japan, and focus on natural English communication. fileciteturn1file0L1-L31</p>
+          <p>I believe students learn best when lessons feel comfortable, practical, and encouraging. My teaching style focuses on helping learners express themselves more naturally while building confidence through conversation, listening practice, pronunciation support, and useful everyday expressions.</p>
+          <p>I have experience working with international learners and a strong interest in language learning, daily communication, and cultural exchange. Having lived in Osaka and Hyogo, I understand the value of creating lessons that feel relevant, human, and enjoyable.</p>
+          <div class="pill-row"><span class="pill">Lived in Osaka & Hyogo</span><span class="pill">International teaching experience</span><span class="pill">Natural conversation focus</span><span class="pill">Warm teaching philosophy</span></div>
+        </div>
+      </div>
+    </section>
+    <section class="section" id="lessons">
+      <div class="container">
+        <div class="section-head reveal">
+          <div><span class="eyebrow">English Lessons</span><h2>Lessons built around real-life English.</h2></div>
+          <p class="lead">The PDF asks for clear lesson offerings, easy booking, and a strong focus on conversation, pronunciation, vocabulary, idioms, travel English, and daily communication for intermediate learners. fileciteturn1file0L32-L67</p>
+        </div>
+        <div class="grid-3">
+          <article class="card soft reveal"><div class="icon">💬</div><h3>Conversation Practice</h3><p>Build comfort with natural speaking, responses, and everyday rhythm through guided conversation.</p></article>
+          <article class="card soft reveal"><div class="icon">🗣️</div><h3>Pronunciation Improvement</h3><p>Work on sounds, stress, linking, and flow so your English feels clearer and more natural.</p></article>
+          <article class="card soft reveal"><div class="icon">✈️</div><h3>Travel & Daily English</h3><p>Practice situations you can actually use for travel, daily life, and common conversations.</p></article>
+        </div>
+        <div class="grid-2" style="margin-top: 22px;">
+          <div class="card reveal"><h3>What we can work on</h3><ul class="bullets"><li>Vocabulary and useful expressions</li><li>Idioms and natural English phrasing</li><li>Listening comprehension strategies</li><li>Confidence for spontaneous conversation</li></ul></div>
+          <div class="card reveal"><h3>Who these lessons are for</h3><ul class="bullets"><li>Japanese learners of English</li><li>Intermediate learners building fluency</li><li>Students who want to sound more natural</li><li>Learners improving confidence in conversation</li></ul></div>
+        </div>
+        <div class="grid-2" id="booking" style="margin-top: 22px;">
+          <div class="card pricing reveal"><span class="eyebrow">Book a Lesson</span><h3>Simple booking experience</h3><p class="lead">This front-end includes a complete booking section ready to connect to Calendly, TidyCal, or a custom booking system.</p><ul class="bullets"><li>1:1 English conversation lesson</li><li>Pronunciation-focused session</li><li>Travel or daily English practice</li></ul><div class="btns"><a href="https://calendly.com/" target="_blank" rel="noopener" class="btn btn-primary">Open Booking Calendar</a><a href="#contact" class="btn btn-secondary">Ask a Question First</a></div></div>
+          <div class="card reveal">
+            <form>
+              <div class="form-grid">
+                <label>Full Name<input type="text" placeholder="Your name" /></label>
+                <label>Email<input type="email" placeholder="you@example.com" /></label>
+                <label>Lesson Type<select><option>Conversation Practice</option><option>Pronunciation Improvement</option><option>Travel English</option><option>Daily Conversation</option></select></label>
+                <label>English Level<select><option>Intermediate</option><option>Upper Intermediate</option><option>Beginner</option><option>Advanced</option></select></label>
+              </div>
+              <label>What would you like to improve?<textarea placeholder="Tell me about your goals, challenges, or what you want to practice."></textarea></label>
+              <button type="button" class="btn btn-primary" onclick="alert('Connect this form to Formspree, Netlify Forms, PHP mail, or your booking backend before production use.')">Submit Request</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section" id="resources">
+      <div class="container">
+        <div class="section-head reveal"><div><span class="eyebrow">Free Learning Resources</span><h2>Helpful materials students can use anytime.</h2></div><p class="lead">The PDF calls for downloadable study materials, vocabulary sheets, guides, listening support, cultural explanations, and English learning tips. fileciteturn1file0L47-L85</p></div>
+        <div class="grid-3">
+          <article class="card resource-card reveal"><div class="icon">📘</div><h3>10 Natural English Phrases for Everyday Conversation</h3><p>A polished downloadable guide with practical phrases students can start using right away.</p><div class="resource-meta">Download PDF →</div></article>
+          <article class="card resource-card reveal"><div class="icon">🎧</div><h3>Tips for Improving Listening Skills</h3><p>Simple listening strategies with practice ideas that help learners follow spoken English more comfortably.</p><div class="resource-meta">Read article →</div></article>
+          <article class="card resource-card reveal"><div class="icon">🌍</div><h3>Common Idioms in Daily English</h3><p>An easy-to-read guide to natural expressions, meanings, and examples from real conversation.</p><div class="resource-meta">Open guide →</div></article>
+        </div>
+        <div class="newsletter reveal" style="margin-top: 24px;">
+          <div class="section-head" style="margin-bottom: 18px; align-items: center;"><div><span class="eyebrow">Newsletter</span><h3 style="font-size: clamp(1.8rem, 2.4vw, 2.4rem);">Get English tips and study resources in your inbox.</h3></div><p class="lead">A newsletter sign-up was specifically requested for lesson updates, resources, and learning tips.</p></div>
+          <form class="form-grid"><label>First Name<input type="text" placeholder="First name" /></label><label>Email Address<input type="email" placeholder="Email address" /></label><div style="grid-column: 1 / -1;"><button type="button" class="btn btn-primary" onclick="alert('Connect this form to Mailchimp, ConvertKit, Brevo, or another email platform before going live.')">Join the Newsletter</button></div></form>
+        </div>
+      </div>
+    </section>
+    <section class="section" id="blog">
+      <div class="container">
+        <div class="section-head reveal"><div><span class="eyebrow">Blog</span><h2>Fresh, useful content for English learners.</h2></div><p class="lead">The blog area below matches the requested themes: language learning strategies, pronunciation advice, cultural differences, and personal stories related to learning English. fileciteturn1file0L55-L70</p></div>
+        <div class="grid-3">
+          <article class="card blog-card reveal"><div class="icon">✨</div><h3>How to Sound More Natural in English Conversation</h3><p>Small shifts in rhythm, reactions, and vocabulary can make your English feel much more natural.</p><div class="blog-meta">Read post →</div></article>
+          <article class="card blog-card reveal"><div class="icon">🧠</div><h3>3 Smart Ways to Build Better Listening Habits</h3><p>Practical ways to improve listening comprehension without making study time feel overwhelming.</p><div class="blog-meta">Read post →</div></article>
+          <article class="card blog-card reveal"><div class="icon">☕</div><h3>What Living in Japan Taught Me About Language Learning</h3><p>A more personal article that adds warmth and authenticity to the brand and teacher profile.</p><div class="blog-meta">Read post →</div></article>
+        </div>
+      </div>
+    </section>
+    <section class="section" id="contact">
+      <div class="container contact-grid">
+        <div class="card soft reveal">
+          <span class="eyebrow">Contact</span>
+          <h2>Let’s start your English journey.</h2>
+          <p class="lead">The contact section was requested as a simple way for visitors to send questions, reach out by email, and optionally connect through social channels. fileciteturn1file0L71-L90</p>
+          <div class="contact-list">
+            <div class="contact-item"><div class="icon" style="margin:0; width:44px; height:44px;">✉️</div><div><strong style="display:block; color:var(--heading);">Email</strong><span class="small">hello@englishwithmakenna.com</span></div></div>
+            <div class="contact-item"><div class="icon" style="margin:0; width:44px; height:44px;">📍</div><div><strong style="display:block; color:var(--heading);">Lesson format</strong><span class="small">Online lessons for learners around the world</span></div></div>
+            <div class="contact-item"><div class="icon" style="margin:0; width:44px; height:44px;">📱</div><div><strong style="display:block; color:var(--heading);">Social links</strong><span class="small">Instagram / YouTube / TikTok placeholders ready to add</span></div></div>
+          </div>
+        </div>
+        <div class="card reveal">
+          <form>
+            <div class="form-grid"><label>Name<input type="text" placeholder="Your name" /></label><label>Email<input type="email" placeholder="Your email" /></label></div>
+            <label>Subject<input type="text" placeholder="How can I help you?" /></label>
+            <label>Message<textarea placeholder="Write your message here."></textarea></label>
+            <button type="button" class="btn btn-primary" onclick="alert('This form needs a backend endpoint such as PHP mail, Formspree, or a custom API before production.')">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="container footer-box"><div><strong style="display:block; color:var(--heading);">English with Makenna</strong><span class="small">A warm, approachable website focused on natural English communication.</span></div><div class="small">© <span id="year"></span> English with Makenna. All rights reserved.</div></div>
+  </footer>
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+    navLinks.querySelectorAll('a').forEach(link => { link.addEventListener('click', () => navLinks.classList.remove('open')); });
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.16 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
