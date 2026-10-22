@@ -51,10 +51,11 @@
     {php}
     $articleId = $this->_tpl_vars['article']->getBestArticleId($this->_tpl_vars['currentJournal']);
 
-    $viewsData = json_decode(file_get_contents('/var/www/revistag/cache/views.json'), true);
+    $baseDir = Core::getBaseDir();
+    $viewsData = json_decode(file_get_contents($baseDir . '/cache/views.json'), true);
     $views = isset($viewsData[$articleId]) ? $viewsData[$articleId] : 0;
 
-	$viewsLastMonthdata = json_decode(file_get_contents('/var/www/revistag/cache/last_month_views.json'), true);
+	$viewsLastMonthdata = json_decode(file_get_contents($baseDir . '/cache/last_month_views.json'), true);
 	$viewsLastMonth = isset($viewsLastMonthdata[$articleId]) ? $viewsLastMonthdata[$articleId]: 0;
     
     // Metadata for sharing
