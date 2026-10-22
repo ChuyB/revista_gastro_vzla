@@ -20,3 +20,9 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
 
 # 4. Habilitar módulo mod_rewrite de Apache
 RUN a2enmod rewrite
+
+# 5. Entrypoint para asegurar permisos en los volúmenes montados
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT ["entrypoint.sh"]
