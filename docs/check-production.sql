@@ -35,9 +35,14 @@ SELECT 'site hero type count [pageHeaderTitleType]',
        IF(COUNT(*)>0,'PASS','FAIL')
   FROM site_settings WHERE setting_name='pageHeaderTitleType'
 UNION ALL
+SELECT 'journal footer [journal_settings.journalPageFooter]',
+       IF(setting_value LIKE '%BellTech%','set','(unset or missing BellTech)'),
+       IF(setting_value LIKE '%BellTech%','PASS','FAIL')
+  FROM journal_settings WHERE journal_id=1 AND setting_name='journalPageFooter'
+UNION ALL
 SELECT 'custom blocks [customblockmanagerplugin.blocks]',
        IFNULL(setting_value,'(unset)'),
-       IF(setting_value LIKE '%PUBLICIDAD left%','PASS','FAIL')
+       IF(setting_value LIKE '%BellTech%','PASS','FAIL')
   FROM plugin_settings WHERE plugin_name='customblockmanagerplugin' AND setting_name='blocks'
 UNION ALL
 SELECT CONCAT('block ',plugin_name),
@@ -48,7 +53,7 @@ SELECT CONCAT('block ',plugin_name),
   FROM plugin_settings
   WHERE journal_id=1 AND setting_name IN ('context','seq','enabled')
     AND plugin_name IN ('userblockplugin','navigationblockplugin','informationblockplugin',
-                        'publicidad','publicidad left','roleblockplugin','developedbyblockplugin')
+                        'publicidad','publicidad left','belltech','roleblockplugin','developedbyblockplugin')
   GROUP BY plugin_name;
 
 SELECT '--- the two things that silently break it ---' AS '';
