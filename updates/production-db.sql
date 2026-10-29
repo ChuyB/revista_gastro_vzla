@@ -18,7 +18,7 @@
 --
 -- 1. mysql ABORTS at the first error unless you pass --force, so if any
 --    statement below fails, everything after it is skipped without a word.
---    Always run the PRE-FLIGHT block above, and section 8 afterwards, to see
+--    Always run the PRE-FLIGHT block above, and section 7 afterwards, to see
 --    what actually landed.
 --
 -- 2. YOU MUST CLEAR THE OJS FILE CACHE AFTERWARDS even when this script exits
@@ -70,24 +70,24 @@ INSERT INTO plugin_settings (plugin_name, locale, journal_id, setting_name, sett
   ('navigationblockplugin', '', 1, 'seq', '1', 'int'),
   ('navigationblockplugin', '', 1, 'enabled', '1', 'bool'),
   ('informationblockplugin', '', 1, 'context', '2', 'int'),
-  ('informationblockplugin', '', 1, 'seq', '2', 'int'),
+  ('informationblockplugin', '', 1, 'seq', '1', 'int'),
   ('informationblockplugin', '', 1, 'enabled', '1', 'bool'),
   ('publicidad', '', 1, 'context', '2', 'int'),
   ('publicidad', '', 1, 'seq', '0', 'int'),
   ('publicidad', '', 1, 'enabled', '1', 'bool'),
-  ('belltech', '', 1, 'context', '2', 'int'),
-  ('belltech', '', 1, 'seq', '1', 'int'),
-  ('belltech', '', 1, 'enabled', '1', 'bool'),
   ('publicidad left', '', 1, 'context', '2', 'int'),
-  ('publicidad left', '', 1, 'seq', '3', 'int'),
+  ('publicidad left', '', 1, 'seq', '2', 'int'),
   ('publicidad left', '', 1, 'enabled', '1', 'bool'),
   ('roleblockplugin', '', 1, 'context', '2', 'int'),
-  ('roleblockplugin', '', 1, 'seq', '4', 'int'),
+  ('roleblockplugin', '', 1, 'seq', '1', 'int'),
   ('roleblockplugin', '', 1, 'enabled', '0', 'bool'),
   ('developedbyblockplugin', '', 1, 'context', '1', 'int'),
   ('developedbyblockplugin', '', 1, 'seq', '4', 'int'),
   ('developedbyblockplugin', '', 1, 'enabled', '0', 'bool')
 ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value), setting_type=VALUES(setting_type);
+
+-- Remove belltech sidebar block if previously added
+DELETE FROM plugin_settings WHERE plugin_name='belltech' AND journal_id=1;
 
 -- 3. Custom block content (chatbot + sponsors, and podcast/capsula)
 -- Keys are the serialized PHP arrays OJS stores; do not hand-edit the hex.
@@ -148,33 +148,19 @@ VALUES ('publicidad left', '', 1, 'blockContent', 'a:1:{s:5:"es_AR";s:827:"<h3 c
 </div>";}', 'object')
 ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value);
 
--- 4. Configure the third custom block, "BellTech"
---    Right sidebar block holding the BellTech logo & mailto link.
---    Requires public/site/images/root/BellTech_principal.svg to be present on the host.
-INSERT INTO plugin_settings (plugin_name, locale, journal_id, setting_name, setting_value, setting_type)
-VALUES
-  ('belltech', '', 1, 'context', '2', 'int'),
-  ('belltech', '', 1, 'seq', '1', 'int'),
-  ('belltech', '', 1, 'enabled', '1', 'bool')
-ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value);
-
-INSERT INTO plugin_settings (plugin_name, locale, journal_id, setting_name, setting_value, setting_type)
-VALUES ('belltech', '', 1, 'blockContent', 'a:1:{s:5:"es_AR";s:452:"<h2 class=\"blockTitle\">Revista modificada por</h2><a href=\"mailto:consultoresbelltech@gmail.com\" style=\"display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; color: inherit; text-align: center;\"><img src=\"/public/site/images/root/BellTech_principal.svg\" alt=\"BellTech\" style=\"height: 40px; width: auto; max-width: 100%; display: block;\" /><span style=\"font-size: 0.85rem;\">consultoresbelltech@gmail.com</span></a>";}', 'object')
-ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value);
-
--- 5. Register the custom blocks in Custom Block Manager.
+-- 4. Register the custom blocks in Custom Block Manager.
 --    Pre-check this on production first: if it already lists custom blocks that
 --    must be kept, merge them into the array instead of replacing it.
 --    Check with:  SELECT setting_value FROM plugin_settings
 --                 WHERE plugin_name='customblockmanagerplugin' AND setting_name='blocks';
 --    A custom block that is not in this list does not render at all.
 INSERT INTO plugin_settings (plugin_name, locale, journal_id, setting_name, setting_value, setting_type)
-VALUES ('customblockmanagerplugin', '', 1, 'blocks', 'a:3:{i:0;s:10:"PUBLICIDAD";i:1;s:15:"PUBLICIDAD left";i:2;s:8:"BellTech";}', 'object')
+VALUES ('customblockmanagerplugin', '', 1, 'blocks', 'a:2:{i:0;s:10:"PUBLICIDAD";i:1;s:15:"PUBLICIDAD left";}', 'object')
 ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value);
 
 -- ---------------------------------------------------------------------------
 -- ---------------------------------------------------------------------------
--- 6. Site-wide theme and hero, for pages with no journal context
+-- 5. Site-wide theme and hero, for pages with no journal context
 -- ---------------------------------------------------------------------------
 --
 -- TemplateManager renders /index.php/index/... (the "Pagina personal" user page,
@@ -204,17 +190,17 @@ INSERT INTO site_settings (setting_name, locale, setting_value, setting_type) VA
 ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value), setting_type=VALUES(setting_type);
 
 -- ---------------------------------------------------------------------------
--- 7. Journal footer (journalPageFooter) with BellTech logo & mailto link
+-- 6. Journal footer (journalPageFooter) with BellTech logo & mailto link
 -- ---------------------------------------------------------------------------
 -- Placed between the 1st <center> (indexing badges table) and 2nd <center>
 -- (Revista GEN / ISSN). Requires public/site/images/root/BellTech_principal.svg
 -- to be present on the host.
 INSERT INTO journal_settings (journal_id, locale, setting_name, setting_value, setting_type)
-VALUES (1, 'es_AR', 'journalPageFooter', '<center><table style="text-align: center; margin: 20px auto; border-collapse: collapse;"><tbody><tr><td style="padding: 10px;"><a href="https://www.latindex.org/latindex/ficha/7894" rel="license" target="_blank"> <img src="/public/site/images/root/latindex-franjas2.png" alt="Latindex" width="150" height="60" /> </a></td><td style="padding: 10px;"><a href="https://ve.scielo.org/scielo.php?script=sci_serial&amp;pid=0016-3503&amp;lng=es&amp;nrm=i" target="_blank"> <img src="/public/site/images/root/scielo1.png" alt="SciELO" width="150" height="60" /> </a></td><td style="padding: 10px;"><a href="https://search.crossref.org/search/works?q=2477-975X&amp;from_ui=yes&amp;page=3" target="_blank"> <img src="/public/site/images/root/crossref1.png" alt="Crossref" width="150" height="60" /> </a></td></tr></tbody></table></center><center><a href="mailto:consultoresbelltech@gmail.com" style="display: inline-flex; flex-direction: column; align-items: center; gap: 4px; margin: 10px auto 18px; text-decoration: none; color: inherit;"><img src="/public/site/images/root/BellTech_principal.svg" alt="BellTech" style="height: 40px; width: auto; display: block;" /><span>consultoresbelltech@gmail.com</span></a></center><center><strong>Revista GEN</strong><br /> ISSN: 0016-3503 e-ISSN: 2477-975X</center><center>Depósito Legal: pp197602CS570</center><center>Sociedad Venezolana de Gastroenterología</center><center><a href="http://creativecommons.org/licenses/by/4.0/" rel="license" target="_blank"> Este trabajo está licenciado bajo Creative Commons 4.0 </a><span>.</span></center><center><em>Revista GEN no almacena ningún tipo de cookies ni variables de sesión de usuarios</em></center>', 'string')
+VALUES (1, 'es_AR', 'journalPageFooter', '<center><table style="text-align: center; margin: 20px auto; border-collapse: collapse;"><tbody><tr><td style="padding: 10px;"><a href="https://www.latindex.org/latindex/ficha/7894" rel="license" target="_blank"> <img src="/public/site/images/root/latindex-franjas2.png" alt="Latindex" width="150" height="60" /> </a></td><td style="padding: 10px;"><a href="https://ve.scielo.org/scielo.php?script=sci_serial&amp;pid=0016-3503&amp;lng=es&amp;nrm=i" target="_blank"> <img src="/public/site/images/root/scielo1.png" alt="SciELO" width="150" height="60" /> </a></td><td style="padding: 10px;"><a href="https://search.crossref.org/search/works?q=2477-975X&amp;from_ui=yes&amp;page=3" target="_blank"> <img src="/public/site/images/root/crossref1.png" alt="Crossref" width="150" height="60" /> </a></td></tr></tbody></table></center><center><a href="mailto:consultoresbelltech@gmail.com" class="footer-belltech" style="display: inline-flex; flex-direction: column; align-items: center; gap: 8px; border: 1px solid #dde3e8; border-radius: 8px; padding: 16px 80px; margin: 20px auto; text-decoration: none; color: #4a5560; box-sizing: border-box; max-width: 90%;"><span style="font-size: 0.875rem; font-weight: 500; color: inherit;">Revista modificada por</span><img src="/public/site/images/root/BellTech_principal.svg" alt="BellTech" style="height: 55px; width: auto; display: block;" /><span style="font-size: 0.85rem; color: inherit;">consultoresbelltech@gmail.com</span></a></center><center><strong>Revista GEN</strong><br /> ISSN: 0016-3503 e-ISSN: 2477-975X</center><center>Depósito Legal: pp197602CS570</center><center>Sociedad Venezolana de Gastroenterología</center><center><a href="http://creativecommons.org/licenses/by/4.0/" rel="license" target="_blank"> Este trabajo está licenciado bajo Creative Commons 4.0 </a><span>.</span></center><center><em>Revista GEN no almacena ningún tipo de cookies ni variables de sesión de usuarios</em></center>', 'string')
 ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value), setting_type=VALUES(setting_type);
 
 -- ---------------------------------------------------------------------------
--- 8. Verification (read-only)
+-- 7. Verification (read-only)
 -- ---------------------------------------------------------------------------
 SELECT 'theme' AS check_name, setting_value AS value FROM journal_settings
   WHERE journal_id=1 AND setting_name='journalTheme'
@@ -236,7 +222,7 @@ SELECT 'block placement', CONCAT(plugin_name,' ctx=',MAX(IF(setting_name='contex
   FROM plugin_settings
   WHERE journal_id=1 AND setting_name IN ('context','seq','enabled')
     AND plugin_name IN ('userblockplugin','navigationblockplugin','informationblockplugin',
-                        'publicidad','publicidad left','belltech','roleblockplugin','developedbyblockplugin')
+                        'publicidad','publicidad left','roleblockplugin','developedbyblockplugin')
   GROUP BY plugin_name;
 
 -- Each blockContent row must unserialize to an array keyed by 'es_AR'.

@@ -42,7 +42,7 @@ SELECT 'journal footer [journal_settings.journalPageFooter]',
 UNION ALL
 SELECT 'custom blocks [customblockmanagerplugin.blocks]',
        IFNULL(setting_value,'(unset)'),
-       IF(setting_value LIKE '%BellTech%','PASS','FAIL')
+       IF(setting_value LIKE '%PUBLICIDAD left%','PASS','FAIL')
   FROM plugin_settings WHERE plugin_name='customblockmanagerplugin' AND setting_name='blocks'
 UNION ALL
 SELECT CONCAT('block ',plugin_name),
@@ -53,7 +53,7 @@ SELECT CONCAT('block ',plugin_name),
   FROM plugin_settings
   WHERE journal_id=1 AND setting_name IN ('context','seq','enabled')
     AND plugin_name IN ('userblockplugin','navigationblockplugin','informationblockplugin',
-                        'publicidad','publicidad left','belltech','roleblockplugin','developedbyblockplugin')
+                        'publicidad','publicidad left','roleblockplugin','developedbyblockplugin')
   GROUP BY plugin_name;
 
 SELECT '--- the two things that silently break it ---' AS '';

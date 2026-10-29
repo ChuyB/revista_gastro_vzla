@@ -258,3 +258,22 @@
 	color: var(--gen-ink-faint);
 	font-size: var(--gen-size-xs);
 }
+
+#pageFooter .footer-belltech {
+	transition: border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+#pageFooter .footer-belltech:hover,
+#pageFooter .footer-belltech:focus {
+	border-color: var(--gen-primary);
+	color: var(--gen-primary) !important;
+	box-shadow: var(--gen-shadow-sm);
+}
+
+@media (max-width: 600px) {
+	#pageFooter .footer-belltech {
+		padding-left: var(--gen-space-5) !important;
+		padding-right: var(--gen-space-5) !important;
+	}
+}
+

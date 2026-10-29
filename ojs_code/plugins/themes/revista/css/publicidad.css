@@ -176,35 +176,3 @@
 	border-top: 1px solid var(--gen-line);
 }
 
-/* --- BellTech block ------------------------------------------------------- */
-
-#customblock-BellTech a {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: var(--gen-space-2);
-	margin: 0;
-	padding: var(--gen-space-2) 0;
-	text-decoration: none;
-	color: inherit;
-	text-align: center;
-	transition: color 0.15s ease;
-}
-
-#customblock-BellTech a:hover,
-#customblock-BellTech a:focus {
-	color: var(--gen-primary);
-}
-
-#customblock-BellTech img {
-	display: block;
-	height: 40px;
-	width: auto;
-	max-width: 100%;
-}
-
-#customblock-BellTech span {
-	font-size: var(--gen-size-xs);
-	color: inherit;
-}
-
