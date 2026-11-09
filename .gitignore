@@ -1,9 +1,18 @@
 .DS_Store
 
+# OJS runtime caches
 ojs_code/cache/
 
+# Large private data directories
 ojs_files/
-
 init_db/
-
 mysql_data/
+
+# Environment files and secrets
+.env
+.env.local
+
+# SQL backups and archives
+backup*.sql
+*.tar.gz
+deploy-*.tar.gz
