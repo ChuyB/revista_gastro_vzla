@@ -5,6 +5,12 @@ services:
     build: .
     container_name: revista_ojs_app
     restart: unless-stopped
+    mem_limit: 380m
+    mem_reservation: 200m
+    environment:
+      ALLOWED_HOSTS: "${ALLOWED_HOSTS:-}"
+      REQUIRE_CLOUDFRONT: "${REQUIRE_CLOUDFRONT:-false}"
+      BLOCK_RAW_IPS: "${BLOCK_RAW_IPS:-false}"
     ports:
       - "${APP_PORT:-8080}:80"
     volumes:
@@ -16,6 +22,8 @@ services:
   db:
     image: mysql:5.7
     container_name: revista_ojs_db
+    mem_limit: 300m
+    mem_reservation: 150m
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}

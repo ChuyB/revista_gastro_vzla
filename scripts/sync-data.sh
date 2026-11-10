@@ -28,19 +28,21 @@ log_warn()    { echo -e "${YELLOW}[WARN]${NC} $*"; }
 log_error()   { echo -e "${RED}[ERROR]${NC} $*"; }
 
 usage() {
+    local exit_code="${1:-0}"
     echo -e "${BOLD}Usage:${NC}"
     echo -e "  $0 [options]"
     echo -e ""
     echo -e "${BOLD}Options:${NC}"
-    echo -e "  --archive [FILE]          Create a compressed archive (default: deploy-data.tar.gz)"
-    echo -e "  --ssh <user@host:path>    Directly rsync data to remote server directory"
-    echo -e "  -h, --help                Show this help message"
+    echo -e "  --archive [FILE]              Create a compressed archive (default: deploy-data.tar.gz)"
+    echo -e "  --ssh <user@host:/path>       Directly rsync data to remote server directory"
+    echo -e "  -h, --help                    Show this help message"
     echo -e ""
     echo -e "${BOLD}Examples:${NC}"
     echo -e "  $0 --archive"
     echo -e "  $0 --archive my-deploy.tar.gz"
+    echo -e "  $0 --ssh ubuntu@52.205.19.85:/var/www/revistag"
     echo -e "  $0 --ssh deploy@revistagen.com:/var/www/revistag"
-    exit 0
+    exit "${exit_code}"
 }
 
 MODE="archive"
@@ -69,14 +71,26 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         -h|--help)
-            usage
+            usage 0
             ;;
         *)
             log_error "Unknown option: $1"
-            usage
+            usage 1
             ;;
     esac
 done
+
+# Validate SSH destination format
+if [[ "${MODE}" == "ssh" ]]; then
+    if [[ "${REMOTE_TARGET}" != *:* || -z "${REMOTE_TARGET%%:*}" || -z "${REMOTE_TARGET#*:}" ]]; then
+        log_error "Invalid target format for --ssh: '${REMOTE_TARGET}'"
+        log_error "SSH target must include host and destination directory path separated by ':'"
+        echo -e "\n${BOLD}Correct usage:${NC}"
+        echo -e "  $0 --ssh user@host:/path/to/revistag"
+        echo -e "  $0 --ssh ubuntu@52.205.19.85:/var/www/revistag"
+        exit 1
+    fi
+fi
 
 echo -e "${BOLD}====================================================================${NC}"
 echo -e "${BOLD}   Revista GEN - Production Data Sync / Package Tool               ${NC}"
@@ -105,6 +119,8 @@ if [[ -f "${ROOT_DIR}/init_db/latest_dump.sql" ]]; then
         gzip -c -9 "${ROOT_DIR}/init_db/latest_dump.sql" > "${ROOT_DIR}/init_db/01_latest_dump.sql.gz"
         log_success "Compressed database dump ($(du -h "${ROOT_DIR}/init_db/01_latest_dump.sql.gz" | cut -f1))"
     fi
+    log_info "Removing uncompressed init_db/latest_dump.sql to prevent duplicate import in /docker-entrypoint-initdb.d..."
+    rm -f "${ROOT_DIR}/init_db/latest_dump.sql"
 fi
 
 if [[ ! -f "${ROOT_DIR}/init_db/01_latest_dump.sql.gz" && ! -f "${ROOT_DIR}/init_db/latest_dump.sql" ]]; then
@@ -127,7 +143,7 @@ if [[ "${MODE}" == "ssh" ]]; then
     log_info "Syncing data to remote target: ${REMOTE_TARGET} via rsync..."
     
     # Make sure remote directories exist
-    ssh "${REMOTE_TARGET%%:*}" "mkdir -p ${REMOTE_TARGET#*:}/init_db ${REMOTE_TARGET#*:}/ojs_files"
+    ssh "${REMOTE_TARGET%%:*}" "mkdir -p '${REMOTE_TARGET#*:}/init_db' '${REMOTE_TARGET#*:}/ojs_files'"
     
     # Rsync init_db (excluding uncompressed latest_dump.sql if gzip exists)
     log_info "Syncing init_db/..."

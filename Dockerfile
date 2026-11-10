@@ -18,10 +18,14 @@ RUN apt-get update && apt-get install -y --allow-unauthenticated \
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install mysql mysqli pdo pdo_mysql gd mbstring zip xml
 
-# 4. Habilitar módulo mod_rewrite de Apache
-RUN a2enmod rewrite
+# 4. Habilitar módulos de Apache para reescritura, cabeceras, proxy inverso y mitigación de ataques
+RUN a2enmod rewrite headers remoteip reqtimeout setenvif
 
-# 5. Entrypoint para asegurar permisos en los volúmenes montados
+# 5. Copiar y habilitar configuración de seguridad y CloudFront
+COPY apache/security-hardening.conf /etc/apache2/conf-available/security-hardening.conf
+RUN a2enconf security-hardening
+
+# 6. Entrypoint para asegurar permisos en los volúmenes montados
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 

@@ -93,7 +93,11 @@ restful_urls = Off
 ; Allow the X_FORWARDED_FOR header to override the REMOTE_ADDR as the source IP
 ; Set this to "On" if you are behind a reverse proxy and you control the X_FORWARDED_FOR
 ; Warning: This defaults to "On" if unset for backwards compatibility.
-trust_x_forwarded_for = Off
+;
+; In reverse proxy architectures (such as AWS CloudFront routing to Docker origin),
+; setting trust_x_forwarded_for = On allows OJS to accurately obtain the client IP
+; address forwarded in the X-Forwarded-For header through trusted proxies.
+trust_x_forwarded_for = On
 
 ; Allow javascript files to be served through a content delivery network (set to off to use local files)
 ; Off: the container has no outbound internet access, so google.com/jsapi never loads and
@@ -242,7 +246,10 @@ force_login_ssl = Off
 ; This check will invalidate a session if the user's IP address changes.
 ; Enabling this option provides some amount of additional security, but may
 ; cause problems for users behind a proxy farm (e.g., AOL).
-session_check_ip = On
+; In CloudFront / CDN environments, set session_check_ip = Off to prevent
+; random user and administrator session logouts caused by requests arriving
+; from varying CloudFront edge IP addresses.
+session_check_ip = Off
 
 ; The encryption (hashing) algorithm to use for encrypting user passwords
 ; Valid values are: md5, sha1
