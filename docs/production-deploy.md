@@ -436,6 +436,7 @@ Nothing under `cache/` is tracked in git, so this stays out of your diffs.
 3. Run `docs/production-db.sql` (§4).
 4. Clear the cache (§5) and reload PHP.
 5. Work through §7.
+6. Configure the keep-alive warm-up ping cronjob — §6.3.
 
 Steps 3 and 4 must stay in that order. The plugin-settings cache in step 4 is
 populated by page requests, so if anything is requested between the file swap and
@@ -622,6 +623,100 @@ diff -rq templates.pre-revista      templates      | head -40
 Only the 19 block templates and 4 templates listed in §1.2 / §1.3 should differ.
 If that diff shows much more, production has local changes that need porting
 into this repo first.
+
+### 6.3 Keep-alive warm-up ping cronjob
+
+In production environments behind Amazon CloudFront or a reverse proxy, idle TCP
+connections between edge nodes and the origin server drop after brief periods of
+inactivity. Subsequent visitor requests experience cold-start latency spikes
+because:
+- Edge nodes must re-establish TCP and TLS connections with the origin.
+- Apache prefork workers idle out and must be spawned or reinitialized.
+- MySQL query cache and InnoDB buffer pool pages go cold.
+
+To prevent cold-request latency spikes, configure the warm-up keep-alive ping
+script (`scripts/keepalive-ping.sh`). It runs periodically (every 2 minutes) to keep
+edge-to-origin TCP connections warm, maintain active Apache workers, and prime
+the database cache.
+
+#### Crontab configuration (recommended)
+
+1. Open crontab on the Lightsail VPS / production host:
+   ```bash
+   crontab -e
+   ```
+
+2. Add the scheduled ping entry:
+   ```cron
+   */2 * * * * /home/ubuntu/revistag/scripts/keepalive-ping.sh >/dev/null 2>&1
+   ```
+
+3. Verify active crontab:
+   ```bash
+   crontab -l
+   ```
+
+#### Testing with verbose mode (`-v` / `--verbose`)
+
+Run the script manually with `-v` to test connectivity and output request timing
+metrics (DNS lookup, TCP connect, TLS appconnect, and total elapsed duration):
+
+```bash
+# Ping the default CloudFront distribution
+./scripts/keepalive-ping.sh -v
+
+# Or ping a specific endpoint URL
+./scripts/keepalive-ping.sh https://d3y1qikecd1br.cloudfront.net/ -v
+```
+
+Expected output:
+```
+[2026-11-11T13:50:00Z] Ping https://d3y1qikecd1br.cloudfront.net/ -> HTTP 200 | DNS: 0.0042s | Connect: 0.0215s | TLS: 0.0451s | Total: 0.1287s
+```
+
+#### Alternative: Systemd timer
+
+For production systems utilizing `systemd` timers with integrated `journald`
+logging:
+
+1. Create `/etc/systemd/system/revistag-keepalive.service`:
+   ```ini
+   [Unit]
+   Description=RevistaG CloudFront Keep-Alive Warm-Up Ping
+   After=network-online.target
+   Wants=network-online.target
+
+   [Service]
+   Type=oneshot
+   User=ubuntu
+   WorkingDirectory=/home/ubuntu/revistag
+   ExecStart=/home/ubuntu/revistag/scripts/keepalive-ping.sh
+   ```
+
+2. Create `/etc/systemd/system/revistag-keepalive.timer`:
+   ```ini
+   [Unit]
+   Description=Run RevistaG Keep-Alive Ping every 2 minutes
+
+   [Timer]
+   OnBootSec=1min
+   OnUnitActiveSec=2min
+   AccuracySec=5s
+
+   [Install]
+   WantedBy=timers.target
+   ```
+
+3. Enable and start the timer:
+   ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl enable --now revistag-keepalive.timer
+   ```
+
+4. Check timer execution and status:
+   ```bash
+   systemctl list-timers revistag-keepalive.timer
+   ```
 
 ---
 

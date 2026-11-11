@@ -29,13 +29,15 @@ Due to the size and sensitivity of journal data, this repository strictly separa
 ├── mysql_data/                 # [GITIGNORED] Persistent MySQL container storage
 │
 ├── docs/                       # Migration and documentation resources
-│   ├── production-db.sql       # Idempotent DB migration for theme & blocks
 │   ├── check-production.sql    # Read-only verification diagnostic suite
-│   └── production-deploy.md    # Reference deployment documentation
+│   ├── production-db.sql       # Idempotent DB migration for theme & blocks
+│   ├── production-deploy.md    # Reference deployment documentation
+│   └── DEPLOYMENT.md           # Production deployment & operations guide
 │
 └── scripts/                    # Deployment & synchronization automation tools
     ├── sync-data.sh            # Prepares, compresses, and transfers private data
-    └── deploy.sh               # Production server startup, cache flush & verification
+    ├── deploy.sh               # Production server startup, cache flush & verification
+    └── keepalive-ping.sh       # Warm-up keep-alive ping for CloudFront & origin
 ```
 
 ---
@@ -111,6 +113,10 @@ nano ojs_code/config.inc.php
 
 # 6. Execute deployment
 ./scripts/deploy.sh
+
+# 7. Configure keep-alive warm-up ping cronjob (see Section 6)
+crontab -e
+# Add: */2 * * * * /home/ubuntu/revistag/scripts/keepalive-ping.sh >/dev/null 2>&1
 ```
 
 ---
@@ -140,6 +146,10 @@ nano ojs_code/config.inc.php
 
 # 5. Execute deployment
 ./scripts/deploy.sh
+
+# 6. Configure keep-alive warm-up ping cronjob (see Section 6)
+crontab -e
+# Add: */2 * * * * /home/ubuntu/revistag/scripts/keepalive-ping.sh >/dev/null 2>&1
 ```
 
 ---
@@ -157,7 +167,106 @@ Running `./scripts/deploy.sh` on the server performs the following sequence:
 
 ---
 
-## 6. Common Operations & Maintenance
+## 6. Origin Keep-Alive Warm-Up Ping (`scripts/keepalive-ping.sh`)
+
+In production environments behind Amazon CloudFront (or similar CDNs / reverse proxies), edge-to-origin TCP connections are closed after brief idle intervals. Additionally, cold requests on an idle Apache / PHP / MySQL stack incur high latency spikes due to:
+- Establishing a fresh TCP handshake and TLS session negotiation.
+- Spawning and initializing idle Apache prefork worker processes.
+- Querying unprimed MySQL query caches and InnoDB buffer pools.
+
+The warm-up keep-alive ping script ([`scripts/keepalive-ping.sh`](scripts/keepalive-ping.sh)) periodically sends a lightweight HTTP request to the CloudFront distribution and origin endpoint to:
+- **Pre-warm CloudFront origin connections & TLS sessions**: Keeps persistent HTTP/TCP keep-alive connections open between CloudFront edge nodes and the origin server.
+- **Warm Apache prefork workers**: Prevents worker processes from idling out or taking penalty startup cycles.
+- **Prime MySQL query cache & buffer pool**: Eliminates cold-request latency spikes for actual readers and authors.
+
+### Crontab Setup (Recommended)
+
+To run the keep-alive ping every 2 minutes:
+
+1. Open the crontab editor on the production host (e.g. AWS Lightsail VPS):
+   ```bash
+   crontab -e
+   ```
+
+2. Add the following line:
+   ```cron
+   */2 * * * * /home/ubuntu/revistag/scripts/keepalive-ping.sh >/dev/null 2>&1
+   ```
+
+3. Verify active crontab:
+   ```bash
+   crontab -l
+   ```
+
+### Testing with Verbose Mode (`-v` / `--verbose`)
+
+Use the `-v` or `--verbose` flag to manually execute the ping and display timing metrics (HTTP status code, DNS lookup, TCP connect, TLS appconnect, and total elapsed duration):
+
+```bash
+# Test using the default CloudFront URL:
+./scripts/keepalive-ping.sh -v
+
+# Test against a custom origin or domain:
+./scripts/keepalive-ping.sh https://d3y1qikecd1br.cloudfront.net/ -v
+```
+
+Example verbose output:
+```
+[2026-11-11T13:50:00Z] Ping https://d3y1qikecd1br.cloudfront.net/ -> HTTP 200 | DNS: 0.0042s | Connect: 0.0215s | TLS: 0.0451s | Total: 0.1287s
+```
+
+You can also override the target endpoint by passing the `PING_URL` environment variable:
+```bash
+PING_URL="https://revistagen.com/" ./scripts/keepalive-ping.sh -v
+```
+
+### Alternative: Systemd Timer
+
+If your production environment prefers `systemd` timers with persistent `journald` logging over cron:
+
+1. Create the systemd service unit (`/etc/systemd/system/revistag-keepalive.service`):
+   ```ini
+   [Unit]
+   Description=RevistaG CloudFront Keep-Alive Warm-Up Ping
+   After=network-online.target
+   Wants=network-online.target
+
+   [Service]
+   Type=oneshot
+   User=ubuntu
+   WorkingDirectory=/home/ubuntu/revistag
+   ExecStart=/home/ubuntu/revistag/scripts/keepalive-ping.sh
+   ```
+
+2. Create the systemd timer unit (`/etc/systemd/system/revistag-keepalive.timer`):
+   ```ini
+   [Unit]
+   Description=Run RevistaG Keep-Alive Ping every 2 minutes
+
+   [Timer]
+   OnBootSec=1min
+   OnUnitActiveSec=2min
+   AccuracySec=5s
+
+   [Install]
+   WantedBy=timers.target
+   ```
+
+3. Enable and start the timer:
+   ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl enable --now revistag-keepalive.timer
+   ```
+
+4. Check timer execution and status:
+   ```bash
+   systemctl list-timers revistag-keepalive.timer
+   journalctl -u revistag-keepalive.service -n 20
+   ```
+
+---
+
+## 7. Common Operations & Maintenance
 
 ### Clearing the OJS Cache
 OJS caches site and plugin settings in flat PHP files. If you change a setting in the database and the site does not reflect it, clear the cache:

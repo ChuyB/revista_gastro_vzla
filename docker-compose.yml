@@ -22,6 +22,7 @@ services:
   db:
     image: mysql:5.7
     container_name: revista_ojs_db
+    command: --skip-name-resolve
     mem_limit: 300m
     mem_reservation: 150m
     restart: unless-stopped
